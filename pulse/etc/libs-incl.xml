@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- declares the libraries needed to build pulse -->
+<project name="library-dependencies">
+  <fileset dir="${libs.dir}" id="pulse.libs">
+    <include name="commons-collections.jar"/>
+    <include name="depot.jar"/>
+    <include name="google-collect.jar"/>
+    <include name="guice.jar"/>
+    <include name="junit4.jar"/>
+    <include name="narya-distrib.jar"/>
+    <include name="samskivert.jar"/>
+    <include name="servlet-api.jar"/>
+    <include name="velocity-1.5-dev.jar"/>
+  </fileset>
+</project>

@@ -1,0 +1,112 @@
+//
+// $Id$
+
+package com.threerings.pulse.server;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+import com.samskivert.jdbc.WriteOnlyUnit;
+import com.samskivert.util.Interval;
+import com.samskivert.util.Invoker;
+
+import com.google.common.collect.Lists;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import com.threerings.presents.annotation.MainInvoker;
+import com.threerings.presents.server.PresentsDObjectMgr;
+import com.threerings.presents.server.ShutdownManager;
+
+import com.threerings.pulse.server.persist.PulseRecord;
+import com.threerings.pulse.server.persist.PulseRepository;
+
+import static com.threerings.pulse.Log.log;
+
+/**
+ * Handles the collection and recording of data. All data collection will take place on the
+ * distributed object event thread. Writing of the data to the database takes place on the invoker
+ * thread.
+ */
+@Singleton
+public class PulseManager
+    implements ShutdownManager.Shutdowner
+{
+    /** Implemented by code that records pulses. */
+    public interface Recorder
+    {
+        /**
+         * Called once per minute on the distributed object event thread to record a pulse. The
+         * returned event will subsequently be written to the database. The record need not have
+         * the {@link PulseRecord#recorded} nor {@link PulseRecord#server} fields filled in.
+         */
+        public PulseRecord takePulse (long now);
+    }
+
+    @Inject public PulseManager (PresentsDObjectMgr omgr)
+    {
+        _pulser = new Interval(omgr) {
+            public void expired () {
+                takePulse();
+            }
+        };
+        _pulser.schedule(PULSE_RECORD_FREQ, true);
+    }
+
+    /**
+     * Registers a recorder for pulse data. All recorders are executed once per minute to obtain
+     * their data and turn it into a persistent record for storage.
+     */
+    public void registerRecorder (Recorder recorder)
+    {
+        _recorders.add(recorder);   
+    }
+
+    // from ShutdownManager.Shutdown
+    public void shutdown ()
+    {
+        _pulser.cancel();
+    }
+
+    protected void takePulse ()
+    {
+        final List<PulseRecord> pulses = Lists.newArrayList();
+        final long now = System.currentTimeMillis();
+        final String server = null; // TODO
+
+        for (Recorder recorder : _recorders) {
+            try {
+                pulses.add(recorder.takePulse(now));
+            } catch (Exception e) {
+                log.warning("Recorder failed", "recorder", recorder, e);
+            }
+        }
+
+        _invoker.postUnit(new WriteOnlyUnit("takePulse") {
+            public void invokePersist () throws Exception {
+                // store the pulses we've taken
+                for (PulseRecord pulse : pulses) {
+                    pulse.recorded = new Timestamp(now);
+                    pulse.server = server;
+                    _pulseRepo.recordPulse(pulse);
+                }
+
+                // prune old pulses if the time is right
+                if (now - _lastPruneStamp > PULSE_PRUNE_FREQ) {
+                    _lastPruneStamp = now;
+                    _pulseRepo.pruneData();
+                }
+            }
+        });
+    }
+
+    protected Interval _pulser;
+    protected List<Recorder> _recorders = Lists.newArrayList();
+    protected long _lastPruneStamp = System.currentTimeMillis();
+
+    @Inject protected @MainInvoker Invoker _invoker;
+    @Inject protected PulseRepository _pulseRepo;
+
+    protected static final long PULSE_RECORD_FREQ = 60 * 1000L; // once a minute
+    protected static final long PULSE_PRUNE_FREQ = 60 * 60 * 1000L; // once an hour
+}
