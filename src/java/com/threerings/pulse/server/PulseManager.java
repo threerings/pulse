@@ -12,6 +12,7 @@ import com.samskivert.util.Invoker;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
 import com.threerings.presents.annotation.MainInvoker;
@@ -36,7 +37,7 @@ public class PulseManager
     public interface Recorder
     {
         /**
-         * Called once per minute on the distributed object event thread to record a pulse. The
+         * Called periodically on the distributed object event thread to record a pulse. The
          * returned event will subsequently be written to the database. The record need not have
          * the {@link PulseRecord#recorded} nor {@link PulseRecord#server} fields filled in.
          */
@@ -50,16 +51,26 @@ public class PulseManager
                 takePulse();
             }
         };
+    }
+
+    /**
+     * Starts the pulse recording interval.
+     */
+    public void start ()
+    {
         _pulser.schedule(PULSE_RECORD_FREQ, true);
     }
 
     /**
-     * Registers a recorder for pulse data. All recorders are executed once per minute to obtain
+     * Registers a recorder for pulse data. The recorder will immediately have its dependencies
+     * injected into a newly created instance. All recorders are executed periodically to obtain
      * their data and turn it into a persistent record for storage.
      */
-    public void registerRecorder (Recorder recorder)
+    public void registerRecorder (Class<? extends PulseRecord> record,
+                                  Class<? extends Recorder> recorder)
     {
-        _recorders.add(recorder);   
+        _pulseRepo.addPulseRecord(record);
+        _recorders.add(_injector.getInstance(recorder));
     }
 
     // from ShutdownManager.Shutdown
@@ -104,9 +115,10 @@ public class PulseManager
     protected List<Recorder> _recorders = Lists.newArrayList();
     protected long _lastPruneStamp = System.currentTimeMillis();
 
+    @Inject protected Injector _injector;
     @Inject protected @MainInvoker Invoker _invoker;
     @Inject protected PulseRepository _pulseRepo;
 
-    protected static final long PULSE_RECORD_FREQ = 60 * 1000L; // once a minute
+    protected static final long PULSE_RECORD_FREQ = 3 * 60 * 1000L; // once per three minutes
     protected static final long PULSE_PRUNE_FREQ = 60 * 60 * 1000L; // once an hour
 }

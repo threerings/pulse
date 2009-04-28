@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import com.samskivert.depot.DepotRepository;
 import com.samskivert.depot.PersistenceContext;
@@ -22,9 +24,10 @@ import com.samskivert.depot.operator.Conditionals.GreaterThanEquals;
 /**
  * Provides for the writing and reading of pulse records.
  */
+@Singleton
 public class PulseRepository extends DepotRepository
 {
-    public PulseRepository (PersistenceContext ctx)
+    @Inject public PulseRepository (PersistenceContext ctx)
     {
         super(ctx);
     }
@@ -34,9 +37,16 @@ public class PulseRepository extends DepotRepository
      */
     public Set<Class<? extends PersistentRecord>> getPulseRecords ()
     {
-        Set<Class<? extends PersistentRecord>> classes = Sets.newHashSet();
-        getManagedRecords(classes);
-        return classes;
+        return _records;
+    }
+
+    /**
+     * Notes that the supplied record will be managed by this repository. This must be called
+     * before the repository is initialized to avoid lazy initialization warnings.
+     */
+    public void addPulseRecord (Class<? extends PulseRecord> record)
+    {
+        _records.add(record);
     }
 
     /**
@@ -86,9 +96,11 @@ public class PulseRepository extends DepotRepository
     // from DepotRepository
     protected void getManagedRecords (Set<Class<? extends PersistentRecord>> classes)
     {
-        classes.add(JVMPulseRecord.class);
-        classes.add(PresentsPulseRecord.class);
+        classes.addAll(_records);
     }
+
+    /** The set of all pulse records managed by this repository. */
+    protected Set<Class<? extends PersistentRecord>> _records = Sets.newHashSet();
 
     protected static final int PRUNE_DAYS = 7;
 }
