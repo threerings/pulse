@@ -10,6 +10,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -17,7 +18,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -29,6 +33,7 @@ import com.samskivert.util.StringUtil;
 import com.samskivert.velocity.FormTool;
 import com.samskivert.velocity.VelocityUtil;
 
+import com.threerings.pulse.server.PulseManager;
 import com.threerings.pulse.server.persist.PulseRecord;
 import com.threerings.pulse.server.persist.PulseRepository;
 import com.threerings.pulse.util.PulseUtil;
@@ -95,44 +100,44 @@ public class PulseServlet extends HttpServlet
     {
         public final RecordInfo.FieldInfo field;
 
-        public GraphData (long start, RecordInfo.FieldInfo field, PulseRecord[] records) {
+        public GraphData (long start, RecordInfo.FieldInfo field, String server,
+                          Collection<PulseRecord> records) {
             this.field = field;
-            _data = new Number[records.length];
-            _ylbls = new String[records.length];
+
+            _server = server;
+            _data = new Number[records.size()];
+            _ylbls = new String[records.size()];
 
             Calendar cal = Calendar.getInstance();
-            int hour = -1;
-            for (int ii = 0; ii < records.length; ii++) {
-                _data[ii] = field.getValue(records[ii]);
-                cal.setTime(records[ii].recorded);
+            int hour = -1, idx = 0;
+            for (PulseRecord record : records) {
+                _data[idx] = field.getValue(record);
+                cal.setTime(record.recorded);
                 int rhour = cal.get(Calendar.HOUR_OF_DAY);
                 if (rhour != hour) {
-                    _ylbls[ii] = _yfmt.format(records[ii].recorded);
+                    _ylbls[idx] = _yfmt.format(record.recorded);
                     hour = rhour;
                 } else {
-                    _ylbls[ii] = "";
+                    _ylbls[idx] = "";
                 }
+                idx++;
             }
             _max = normalize(_data);
         }
 
         public String getChartParams () {
             StringBuilder buf = new StringBuilder();
-            buf.append("chs=").append(_data.length+200).append("x").append(SCALED_MAX); // size
+            buf.append("chs=").append(_data.length+200).append("x").append(100); // size
             buf.append("&cht=").append("lc"); // line chart
+            buf.append("&chtt=").append(_server); // title
             buf.append("&chxt=x,y"); // axes
             buf.append("&chxr=1,0,").append(_max); // y axis range
             buf.append("&chxl=0:|").append(StringUtil.join(_ylbls, "|"));
-            buf.append("&chd=t:"); // our data
-            for (int ii = 0; ii < _data.length; ii++) {
-                if (ii > 0) {
-                    buf.append(",");
-                }
-                buf.append(_data[ii]);
-            }
+            buf.append("&chd=t:").append(StringUtil.join(_data, ",")); // our data
             return buf.toString();
         }
 
+        protected final String _server;
         protected final Number[] _data;
         protected final long _max;
         protected final String[] _ylbls;
@@ -177,15 +182,18 @@ public class PulseServlet extends HttpServlet
         ctx.put("graphs", graphs);
 
         for (RecordInfo info : _records) {
-            PulseRecord[] data = null;
+            Multimap<String, PulseRecord> data = null;
             for (RecordInfo.FieldInfo field : info.fields) {
                 if (ParameterUtil.isSet(req, field.getId())) {
                     if (data == null) {
-                        Collection<? extends PulseRecord> rows =
-                            _pulseRepo.loadPulseHistory(info.clazz, days);
-                        data = rows.toArray(new PulseRecord[rows.size()]);
+                        data = ArrayListMultimap.create();
+                        for (PulseRecord record : _pulseRepo.loadPulseHistory(info.clazz, days)) {
+                            data.put(record.server, record);
+                        }
                     }
-                    graphs.add(new GraphData(start, field, data));
+                    for (String server : Sets.newTreeSet(data.keySet())) {
+                        graphs.add(new GraphData(start, field, server, data.get(server)));
+                    }
                 }
             }
         }
@@ -235,5 +243,5 @@ public class PulseServlet extends HttpServlet
     protected static SimpleDateFormat _yfmt = new SimpleDateFormat("HH:mm");
 
     protected static final String GRAPHS_TMPL = "com/threerings/pulse/web/server/graphs.tmpl";
-    protected static final int SCALED_MAX = 200;
+    protected static final int SCALED_MAX = 100;
 }
