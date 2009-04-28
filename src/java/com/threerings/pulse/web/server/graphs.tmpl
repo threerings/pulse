@@ -1,10 +1,26 @@
 <html>
 <head><title>Pulse Graphs</title></head>
 <body>
+
+<table>
+<tr><td valign="top" style="padding-right: 10px">
+<form action="/pulse" method="POST">
 #foreach ($record in $records)
 <b>$record.name</b><br/>
 #foreach ($field in $record.fields)
-$field<br/>
+$form.checkbox($field.id, false) $field.name<br/>
 #end
 #end
+<input type="submit" name="submit" value="update">
+</form>
+
+</td><td width="100%" valign="top">
+
+#foreach ($graph in $graphs)
+<p>$graph.field.id<br/>
+<img src="http://chart.apis.google.com/chart?${graph.chartParams}"/></p>
+#end
+
+</td></tr></table>
+
 </body>

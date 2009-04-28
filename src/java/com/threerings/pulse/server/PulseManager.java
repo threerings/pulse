@@ -44,6 +44,12 @@ public class PulseManager
         public PulseRecord takePulse (long now);
     }
 
+    /** The frequency with which we record pulses. */
+    public static final long PULSE_RECORD_FREQ = 3 * 60 * 1000L; // once per three minutes
+
+    /** The frequency with which we prune old pulse data. */
+    public static final long PULSE_PRUNE_FREQ = 60 * 60 * 1000L; // once an hour
+
     @Inject public PulseManager (PresentsDObjectMgr omgr)
     {
         _pulser = new Interval(omgr) {
@@ -121,7 +127,4 @@ public class PulseManager
     @Inject protected Injector _injector;
     @Inject protected @MainInvoker Invoker _invoker;
     @Inject protected PulseRepository _pulseRepo;
-
-    protected static final long PULSE_RECORD_FREQ = 3 * 60 * 1000L; // once per three minutes
-    protected static final long PULSE_PRUNE_FREQ = 60 * 60 * 1000L; // once an hour
 }
