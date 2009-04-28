@@ -223,8 +223,10 @@ public class PulseServlet extends HttpServlet
         for (Number value : data) {
             max = Math.max(value.longValue(), max);
         }
-        for (int ii = 0; ii < data.length; ii++) {
-            data[ii] = (int)(SCALED_MAX * data[ii].longValue() / max);
+        if (max > 0) {
+            for (int ii = 0; ii < data.length; ii++) {
+                data[ii] = (int)(SCALED_MAX * data[ii].longValue() / max);
+            }
         }
         return max;
     }
