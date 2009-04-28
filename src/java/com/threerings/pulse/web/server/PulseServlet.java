@@ -8,11 +8,9 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -32,7 +29,6 @@ import com.samskivert.util.StringUtil;
 import com.samskivert.velocity.FormTool;
 import com.samskivert.velocity.VelocityUtil;
 
-import com.threerings.pulse.server.PulseManager;
 import com.threerings.pulse.server.persist.PulseRecord;
 import com.threerings.pulse.server.persist.PulseRepository;
 import com.threerings.pulse.util.PulseUtil;
