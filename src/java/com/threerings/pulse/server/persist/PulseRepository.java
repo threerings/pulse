@@ -6,6 +6,8 @@ package com.threerings.pulse.server.persist;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
@@ -37,7 +39,7 @@ public class PulseRepository extends DepotRepository
      */
     public Set<Class<? extends PersistentRecord>> getPulseRecords ()
     {
-        return _records;
+        return Collections.unmodifiableSet(_records);
     }
 
     /**
@@ -100,7 +102,11 @@ public class PulseRepository extends DepotRepository
     }
 
     /** The set of all pulse records managed by this repository. */
-    protected Set<Class<? extends PersistentRecord>> _records = Sets.newHashSet();
+    protected Set<Class<? extends PersistentRecord>> _records = Sets.newTreeSet(new Comparator<Class<?>>() {
+        public int compare (Class<?> one, Class<?> two) {
+            return one.getName().compareTo(two.getName());
+        }
+    });
 
     protected static final int PRUNE_DAYS = 7;
 }

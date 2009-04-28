@@ -1,0 +1,10 @@
+<html>
+<head><title>Pulse Graphs</title></head>
+<body>
+#foreach ($record in $records)
+<b>$record.name</b><br/>
+#foreach ($field in $record.fields)
+$field<br/>
+#end
+#end
+</body>
