@@ -55,9 +55,12 @@ public class PulseManager
 
     /**
      * Starts the pulse recording interval.
+     *
+     * @param server the identifier to use for this server.
      */
-    public void start ()
+    public void init (String server)
     {
+        _server = server;
         _pulser.schedule(PULSE_RECORD_FREQ, true);
     }
 
@@ -83,7 +86,6 @@ public class PulseManager
     {
         final List<PulseRecord> pulses = Lists.newArrayList();
         final long now = System.currentTimeMillis();
-        final String server = null; // TODO
 
         for (Recorder recorder : _recorders) {
             try {
@@ -98,7 +100,7 @@ public class PulseManager
                 // store the pulses we've taken
                 for (PulseRecord pulse : pulses) {
                     pulse.recorded = new Timestamp(now);
-                    pulse.server = server;
+                    pulse.server = _server;
                     _pulseRepo.recordPulse(pulse);
                 }
 
@@ -111,6 +113,7 @@ public class PulseManager
         });
     }
 
+    protected String _server;
     protected Interval _pulser;
     protected List<Recorder> _recorders = Lists.newArrayList();
     protected long _lastPruneStamp = System.currentTimeMillis();

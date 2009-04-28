@@ -22,6 +22,9 @@ public class JVMPulseRecord extends PulseRecord
     public static final ColumnExp SERVER = colexp(_R, "server");
     // AUTO-GENERATED: FIELDS END
 
+    /** Increment this when making any schema changes. */
+    public static final int SCHEMA_VERSION = 1;
+
     /** The number of kilobytes of heap used. */
     public int usedHeap;
 
