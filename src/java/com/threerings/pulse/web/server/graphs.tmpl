@@ -8,7 +8,7 @@
 #foreach ($record in $records)
 <b>$record.name</b><br/>
 #foreach ($field in $record.fields)
-$form.checkbox($field.id, false) $field.name<br/>
+<div style="white-space: nowrap; clear: both">$form.checkbox($field.id, false) $field.name</div>
 #end
 #end
 <input type="submit" name="submit" value="update">
