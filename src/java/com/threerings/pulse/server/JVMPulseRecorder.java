@@ -12,6 +12,12 @@ import com.threerings.pulse.server.persist.PulseRecord;
 public class JVMPulseRecorder implements PulseManager.Recorder
 {
     // from interface PulseManager.Recorder
+    public Class<? extends PulseRecord> getRecordClass ()
+    {
+        return JVMPulseRecord.class;
+    }
+
+    // from interface PulseManager.Recorder
     public PulseRecord takePulse (long now)
     {
         JVMPulseRecord record = new JVMPulseRecord();

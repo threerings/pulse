@@ -20,6 +20,9 @@ public class PresentsPulseRecord extends PulseRecord
     public static final ColumnExp UNIT_COUNT = colexp(_R, "unitCount");
     public static final ColumnExp MAX_INVOKER_QUEUE_SIZE = colexp(_R, "maxInvokerQueueSize");
     public static final ColumnExp CONNECTIONS = colexp(_R, "connections");
+    public static final ColumnExp CONNECTS = colexp(_R, "connects");
+    public static final ColumnExp DISCONNECTS = colexp(_R, "disconnects");
+    public static final ColumnExp CLOSES = colexp(_R, "closes");
     public static final ColumnExp BYTES_IN = colexp(_R, "bytesIn");
     public static final ColumnExp BYTES_OUT = colexp(_R, "bytesOut");
     public static final ColumnExp MSGS_IN = colexp(_R, "msgsIn");
@@ -46,16 +49,25 @@ public class PresentsPulseRecord extends PulseRecord
     /** The number of dobj connections currently active. */
     public int connections;
 
-    /** The number of bytes read from our dobj connections. */
+    /** The number of new connections established in this period. */
+    public int connects;
+
+    /** The number of disconnections that happened in this period. */
+    public int disconnects;
+
+    /** The number of sockets cleanly closed in this period. */
+    public int closes;
+
+    /** The number of bytes read from our connections in this period. */
     public int bytesIn;
 
-    /** The number of bytes written to our dobj connections. */
+    /** The number of bytes written to our connections in this period. */
     public int bytesOut;
 
-    /** The number of messages read from our dobj connections. */
+    /** The number of messages read from our connections in this period. */
     public int msgsIn;
 
-    /** The number of messages written to our dobj connections. */
+    /** The number of messages written to our connections in this period. */
     public int msgsOut;
 
     // AUTO-GENERATED: METHODS START

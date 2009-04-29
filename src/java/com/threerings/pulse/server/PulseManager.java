@@ -37,6 +37,11 @@ public class PulseManager
     public interface Recorder
     {
         /**
+         * Returns the type of record created by this recorder.
+         */
+        public Class<? extends PulseRecord> getRecordClass ();
+
+        /**
          * Called periodically on the distributed object event thread to record a pulse. The
          * returned event will subsequently be written to the database. The record need not have
          * the {@link PulseRecord#recorded} nor {@link PulseRecord#server} fields filled in.
@@ -75,11 +80,11 @@ public class PulseManager
      * injected into a newly created instance. All recorders are executed periodically to obtain
      * their data and turn it into a persistent record for storage.
      */
-    public void registerRecorder (Class<? extends PulseRecord> record,
-                                  Class<? extends Recorder> recorder)
+    public void registerRecorder (Class<? extends Recorder> rclass)
     {
-        _pulseRepo.addPulseRecord(record);
-        _recorders.add(_injector.getInstance(recorder));
+        Recorder recorder = _injector.getInstance(rclass);
+        _pulseRepo.addPulseRecord(recorder.getRecordClass());
+        _recorders.add(recorder);
     }
 
     // from ShutdownManager.Shutdown
