@@ -9,7 +9,7 @@ import com.samskivert.depot.Key;
 import com.samskivert.depot.expression.ColumnExp;
 
 /**
- * Contains metrics for a Presents system.
+ * Contains metrics for the Presents system.
  */
 public class PresentsPulseRecord extends PulseRecord
 {
