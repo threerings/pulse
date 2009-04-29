@@ -27,6 +27,9 @@ public class PeerPulseRecord extends PulseRecord
     public static final ColumnExp SERVER = colexp(_R, "server");
     // AUTO-GENERATED: FIELDS END
 
+    /** Increment this when making any schema changes. */
+    public static final int SCHEMA_VERSION = 1;
+
     /** The number of locks acquired during the period. */
     public int locksAcquired;
 
