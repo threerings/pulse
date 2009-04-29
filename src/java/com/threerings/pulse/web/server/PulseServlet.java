@@ -114,7 +114,7 @@ public class PulseServlet extends HttpServlet
                 _data[idx] = field.getValue(record);
                 cal.setTime(record.recorded);
                 int rhour = cal.get(Calendar.HOUR_OF_DAY);
-                if (rhour != hour) {
+                if (rhour > hour+1) {
                     _ylbls[idx] = _yfmt.format(record.recorded);
                     hour = rhour;
                 } else {
@@ -127,7 +127,7 @@ public class PulseServlet extends HttpServlet
 
         public String getChartParams () {
             StringBuilder buf = new StringBuilder();
-            buf.append("chs=").append(_data.length+200).append("x").append(100); // size
+            buf.append("chs=").append(_data.length+EXTRA_WIDTH).append("x").append(100); // size
             buf.append("&cht=").append("lc"); // line chart
             buf.append("&chtt=").append(_server); // title
             buf.append("&chxt=x,y"); // axes
@@ -244,4 +244,5 @@ public class PulseServlet extends HttpServlet
 
     protected static final String GRAPHS_TMPL = "com/threerings/pulse/web/server/graphs.tmpl";
     protected static final int SCALED_MAX = 100;
+    protected static final int EXTRA_WIDTH = 50; // for axis labels and small bits
 }

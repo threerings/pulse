@@ -19,8 +19,9 @@ $form.checkbox($field.id, false) $field.name<br/>
 #set ($curid = "")
 #foreach ($graph in $graphs)
 #if ($curid != $graph.field.id)
+#if ($curid != "")<div style="height: 10px"></div>#end
 #set ($curid = $graph.field.id)
-$graph.field.id<br/>
+<div style="clear: both">$graph.field.id</div>
 #end
 <img src="http://chart.apis.google.com/chart?${graph.chartParams}"/>
 #end
