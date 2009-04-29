@@ -52,13 +52,12 @@ public class PulseRepository extends DepotRepository
     }
 
     /**
-     * Loads the data for the supplied set of records for the specified number of days. Supplying
-     * zero will load the data for today, 1 the data for yesterday and today, etc. The records are
-     * returned in ascending time order.
+     * Loads the data for the supplied set of records for the specified number of days. One day is
+     * the last 24 hours, two days, the last 48, etc.
      */
     public <T extends PulseRecord> Collection<T> loadPulseHistory (Class<T> type, int days)
     {
-        Timestamp time = new Timestamp(PulseUtil.getStart(days));
+        Timestamp time = new Timestamp(System.currentTimeMillis() - days*24*60*60*1000L);
         return findAll(type, new Where(new GreaterThanEquals(PulseRecord.RECORDED.as(type), time)),
                        OrderBy.ascending(PulseRecord.RECORDED.as(type)));
     }

@@ -106,21 +106,16 @@ public class PulseServlet extends HttpServlet
 
             _server = server;
             _data = new Number[records.size()];
-            _ylbls = new String[records.size()];
 
             Calendar cal = Calendar.getInstance();
-            int hour = -1, idx = 0;
+            int ll = records.size(), idx = 0, didx = 0;
+            int[] ridxs = new int[] { 0, ll/5, 2*ll/5, 3*ll/5, 4*ll/5, ll-1 };
+            _ylbls = new String[ridxs.length];
             for (PulseRecord record : records) {
-                _data[idx] = field.getValue(record);
-                cal.setTime(record.recorded);
-                int rhour = cal.get(Calendar.HOUR_OF_DAY);
-                if (rhour > hour+1) {
-                    _ylbls[idx] = _yfmt.format(record.recorded);
-                    hour = rhour;
-                } else {
-                    _ylbls[idx] = "";
+                if (idx == ridxs[didx]) {
+                    _ylbls[didx++] = _yfmt.format(record.recorded);
                 }
-                idx++;
+                _data[idx++] = field.getValue(record);
             }
             _max = normalize(_data);
         }
@@ -129,11 +124,12 @@ public class PulseServlet extends HttpServlet
             StringBuilder buf = new StringBuilder();
             buf.append("chs=").append(_data.length+EXTRA_WIDTH).append("x").append(100); // size
             buf.append("&cht=").append("lc"); // line chart
-            buf.append("&chtt=").append(_server + " " + field.getName()); // title
+            buf.append("&chdl=").append(_server + " " + field.getName()); // legend
             buf.append("&chxt=x,y"); // axes
+            buf.append("&chg=20,100"); // grid
             buf.append("&chxr=1,0,").append(_max); // y axis range
             buf.append("&chxl=0:|").append(StringUtil.join(_ylbls, "|"));
-            buf.append("&chd=t:").append(StringUtil.join(_data, ",")); // our data
+            buf.append("&chd=e:").append(encode(_data)); // our data
             return buf.toString();
         }
 
@@ -175,7 +171,7 @@ public class PulseServlet extends HttpServlet
         throws IOException
     {
         VelocityContext ctx = createContext(req);
-        int days = 0; // TODO
+        int days = 1; // TODO
         long start = PulseUtil.getStart(days);
 
         List<GraphData> graphs = Lists.newArrayList();
@@ -223,16 +219,31 @@ public class PulseServlet extends HttpServlet
 
     protected static long normalize (Number[] data)
     {
-        long max = 0;
+        double max = 0;
         for (Number value : data) {
-            max = Math.max(value.longValue(), max);
+            max = Math.max(value.doubleValue(), max);
         }
         if (max > 0) {
             for (int ii = 0; ii < data.length; ii++) {
-                data[ii] = (int)(SCALED_MAX * data[ii].longValue() / max);
+                data[ii] = (int)(SCALED_MAX * data[ii].doubleValue() / max);
             }
         }
-        return max;
+        return (long)max;
+    }
+
+    protected static String encode (Number[] data)
+    {
+        StringBuilder buf = new StringBuilder();
+        for (Number num : data) {
+            int value = num.intValue();
+            if (value < 0) {
+                buf.append("__");
+            } else {
+                buf.append(EENC_CHARS.charAt(value / EENC_CHARS.length()));
+                buf.append(EENC_CHARS.charAt(value % EENC_CHARS.length()));
+            }
+        }
+        return buf.toString();
     }
 
     protected List<RecordInfo> _records = Lists.newArrayList();
@@ -243,6 +254,8 @@ public class PulseServlet extends HttpServlet
     protected static SimpleDateFormat _yfmt = new SimpleDateFormat("HH:mm");
 
     protected static final String GRAPHS_TMPL = "com/threerings/pulse/web/server/graphs.tmpl";
-    protected static final int SCALED_MAX = 100;
-    protected static final int EXTRA_WIDTH = 50; // for axis labels and small bits
+    protected static final int SCALED_MAX = 4095;
+    protected static final int EXTRA_WIDTH = 150; // for axis labels and key
+    protected static final String EENC_CHARS =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.";
 }
