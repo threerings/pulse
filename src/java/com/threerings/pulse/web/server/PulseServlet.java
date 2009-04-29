@@ -129,7 +129,7 @@ public class PulseServlet extends HttpServlet
             StringBuilder buf = new StringBuilder();
             buf.append("chs=").append(_data.length+EXTRA_WIDTH).append("x").append(100); // size
             buf.append("&cht=").append("lc"); // line chart
-            buf.append("&chtt=").append(_server); // title
+            buf.append("&chtt=").append(_server + " " + field.getName()); // title
             buf.append("&chxt=x,y"); // axes
             buf.append("&chxr=1,0,").append(_max); // y axis range
             buf.append("&chxl=0:|").append(StringUtil.join(_ylbls, "|"));
