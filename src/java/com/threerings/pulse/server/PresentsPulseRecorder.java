@@ -46,6 +46,7 @@ public class PresentsPulseRecorder implements PulseManager.Recorder
         record.bytesOut = (int)(cstats.bytesOut - _lcstats.bytesOut);
         record.msgsIn = (int)(cstats.msgsIn - _lcstats.msgsIn);
         record.msgsOut = (int)(cstats.msgsOut - _lcstats.msgsOut);
+        _lcstats = cstats;
 
         return record;
     }

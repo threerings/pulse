@@ -36,6 +36,7 @@ public class PeerPulseRecorder implements PulseManager.Recorder
         record.nodeActionsInvoked = (int)(stats.nodeActionsInvoked - _last.nodeActionsInvoked);
         record.peerMessagesIn = (int)(stats.peerMessagesIn.get() - _last.peerMessagesIn.get());
         record.peerMessagesOut = (int)(stats.peerMessagesOut - _last.peerMessagesOut);
+        _last = stats;
         return record;
     }
 
