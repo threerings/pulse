@@ -25,7 +25,6 @@ public class PeerPulseRecorder implements PulseManager.Recorder
     public PulseRecord takePulse (long now)
     {
         PeerPulseRecord record = new PeerPulseRecord();
-
         PeerManager.Stats stats = _peerMan.getStats();
         record.locksAcquired = (int)(stats.locksAcquired - _last.locksAcquired);
         long periodWait = stats.lockAcquireWait - _last.lockAcquireWait;
