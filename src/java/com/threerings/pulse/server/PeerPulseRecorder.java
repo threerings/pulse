@@ -28,7 +28,8 @@ public class PeerPulseRecorder implements PulseManager.Recorder
 
         PeerManager.Stats stats = _peerMan.getStats();
         record.locksAcquired = (int)(stats.locksAcquired - _last.locksAcquired);
-        record.lockAcquireWait = (int)(stats.lockAcquireWait - _last.lockAcquireWait);
+        long periodWait = stats.lockAcquireWait - _last.lockAcquireWait;
+        record.lockAcquireWait = (int)(periodWait / record.locksAcquired);
         record.locksReleased = (int)(stats.locksReleased - _last.locksReleased);
         record.locksHijacked = (int)(stats.locksHijacked - _last.locksHijacked);
         record.lockTimeouts = (int)(stats.lockTimeouts - _last.lockTimeouts);

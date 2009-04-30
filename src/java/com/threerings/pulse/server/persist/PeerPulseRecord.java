@@ -33,7 +33,7 @@ public class PeerPulseRecord extends PulseRecord
     /** The number of locks acquired during the period. */
     public int locksAcquired;
 
-    /** The number of milliseconds spent waiting to acquire locks during the period. */
+    /** The average time (in millis) spent waiting to acquire locks during the period. */
     public int lockAcquireWait;
 
     /** The number of locks released during the period. */
