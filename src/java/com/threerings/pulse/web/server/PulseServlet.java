@@ -122,9 +122,12 @@ public class PulseServlet extends HttpServlet
 
         public String getChartParams () {
             StringBuilder buf = new StringBuilder();
-            buf.append("chs=").append(_data.length+EXTRA_WIDTH).append("x").append(100); // size
+            String legend = _server + " " + field.getName();
+            int width = _data.length + EXTRA_WIDTH + CHAR_WIDTH * legend.length() +
+                CHAR_WIDTH + String.valueOf(_max).length();
+            buf.append("chs=").append(width).append("x").append(HEIGHT); // size
             buf.append("&cht=").append("lc"); // line chart
-            buf.append("&chdl=").append(_server + " " + field.getName()); // legend
+            buf.append("&chdl=").append(legend); // legend
             buf.append("&chxt=x,y"); // axes
             buf.append("&chg=20,100"); // grid
             buf.append("&chxr=1,0,").append(_max); // y axis range
@@ -255,7 +258,9 @@ public class PulseServlet extends HttpServlet
 
     protected static final String GRAPHS_TMPL = "com/threerings/pulse/web/server/graphs.tmpl";
     protected static final int SCALED_MAX = 4095;
-    protected static final int EXTRA_WIDTH = 150; // for axis labels and key
+    protected static final int EXTRA_WIDTH = 25; // for niggling bits
+    protected static final int CHAR_WIDTH = 9; // for axis labels and key
+    protected static final int HEIGHT = 100; // chart height
     protected static final String EENC_CHARS =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.";
 }
