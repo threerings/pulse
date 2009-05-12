@@ -8,9 +8,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -33,7 +31,6 @@ import com.samskivert.util.StringUtil;
 import com.samskivert.velocity.FormTool;
 import com.samskivert.velocity.VelocityUtil;
 
-import com.threerings.pulse.server.PulseManager;
 import com.threerings.pulse.server.persist.PulseRecord;
 import com.threerings.pulse.server.persist.PulseRepository;
 import com.threerings.pulse.util.PulseUtil;
@@ -107,7 +104,6 @@ public class PulseServlet extends HttpServlet
             _server = server;
             _data = new Number[records.size()];
 
-            Calendar cal = Calendar.getInstance();
             int ll = records.size(), idx = 0, didx = 0;
             int[] ridxs = new int[] { 0, ll/5, 2*ll/5, 3*ll/5, 4*ll/5, ll-1 };
             _ylbls = new String[ridxs.length];
