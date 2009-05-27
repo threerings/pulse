@@ -9,6 +9,7 @@ import java.util.List;
 import com.samskivert.jdbc.WriteOnlyUnit;
 import com.samskivert.util.Interval;
 import com.samskivert.util.Invoker;
+import com.samskivert.util.Lifecycle;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -17,7 +18,6 @@ import com.google.inject.Singleton;
 
 import com.threerings.presents.annotation.MainInvoker;
 import com.threerings.presents.server.PresentsDObjectMgr;
-import com.threerings.presents.server.ShutdownManager;
 
 import com.threerings.pulse.server.persist.PulseRecord;
 import com.threerings.pulse.server.persist.PulseRepository;
@@ -31,7 +31,7 @@ import static com.threerings.pulse.Log.log;
  */
 @Singleton
 public class PulseManager
-    implements ShutdownManager.Shutdowner
+    implements Lifecycle.ShutdownComponent
 {
     /** Implemented by code that records pulses. */
     public interface Recorder
@@ -87,7 +87,7 @@ public class PulseManager
         _recorders.add(recorder);
     }
 
-    // from ShutdownManager.Shutdown
+    // from Lifecycle.ShutdownComponent
     public void shutdown ()
     {
         _pulser.cancel();
