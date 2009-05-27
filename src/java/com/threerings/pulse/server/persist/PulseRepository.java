@@ -18,8 +18,8 @@ import com.samskivert.depot.PersistenceContext;
 import com.samskivert.depot.PersistentRecord;
 import com.samskivert.depot.clause.OrderBy;
 import com.samskivert.depot.clause.Where;
-import com.samskivert.depot.operator.Conditionals.LessThan;
-import com.samskivert.depot.operator.Conditionals.GreaterThanEquals;
+import com.samskivert.depot.operator.GreaterThanEquals;
+import com.samskivert.depot.operator.LessThan;
 
 import com.threerings.pulse.util.PulseUtil;
 
