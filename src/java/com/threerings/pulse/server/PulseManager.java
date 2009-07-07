@@ -58,7 +58,7 @@ public class PulseManager
     @Inject public PulseManager (PresentsDObjectMgr omgr)
     {
         _pulser = new Interval(omgr) {
-            public void expired () {
+            @Override public void expired () {
                 takePulse();
             }
         };
@@ -107,7 +107,7 @@ public class PulseManager
         }
 
         _invoker.postUnit(new WriteOnlyUnit("takePulse") {
-            public void invokePersist () throws Exception {
+            @Override public void invokePersist () throws Exception {
                 // store the pulses we've taken
                 for (PulseRecord pulse : pulses) {
                     pulse.recorded = new Timestamp(now);

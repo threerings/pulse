@@ -83,7 +83,7 @@ public class PulseRepository extends DepotRepository
         }
     }
 
-    // from DepotRepository
+    @Override // from DepotRepository
     protected void getManagedRecords (Set<Class<? extends PersistentRecord>> classes)
     {
         classes.addAll(_records);
