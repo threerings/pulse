@@ -212,6 +212,7 @@ public class PulseServlet extends HttpServlet
             _velocity.mergeTemplate(GRAPHS_TMPL, "UTF-8", ctx, out);
             out.close();
         } catch (Exception e) {
+            // Java1.6:         throw new IOException("Velocity failure", e);
             IOException io = new IOException("Velocity failure");
             io.initCause(e);
             throw io;
