@@ -6,8 +6,6 @@ package com.threerings.pulse.web.server;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,8 +33,6 @@ import com.threerings.pulse.server.persist.PulseRecord;
 import com.threerings.pulse.server.persist.PulseRepository;
 import com.threerings.pulse.util.PulseUtil;
 
-import static com.threerings.pulse.Log.log;
-
 /**
  * Displays our pulse datasets via a simple web interface. This servlet must have its dependencies
  * injected.
@@ -44,54 +40,6 @@ import static com.threerings.pulse.Log.log;
 @Singleton
 public class PulseServlet extends HttpServlet
 {
-    /** Used in our template (and therefore must be public, sigh). */
-    public static class RecordInfo
-    {
-        public class FieldInfo {
-            public final Field field;
-
-            public FieldInfo (Field field) {
-                this.field = field;
-            }
-
-            public String getName () {
-                return field.getName();
-            }
-
-            public String getId () {
-                return clazz.getSimpleName() + "." + getName();
-            }
-
-            public Number getValue (PulseRecord record) {
-                try {
-                    return (Number)field.get(record);
-                } catch (Exception e) {
-                    log.warning("Failed to fetch " + getId() + " from " + record, e);
-                    return 0;
-                }
-            }
-        }
-
-        public final Class<? extends PulseRecord> clazz;
-        public final List<FieldInfo> fields = Lists.newArrayList();
-
-        public RecordInfo (Class<? extends PulseRecord> clazz) {
-            this.clazz = clazz;
-
-            for (Field field : clazz.getFields()) {
-                if (Modifier.isPublic(field.getModifiers()) &&
-                    !Modifier.isStatic(field.getModifiers()) &&
-                    !field.getDeclaringClass().equals(PulseRecord.class)) {
-                    fields.add(new FieldInfo(field));
-                }
-            }
-        }
-
-        public String getName () {
-            return clazz.getSimpleName();
-        }
-    }
-
     /** Used in our template (and therefore must be public, sigh). */
     public static class GraphData
     {

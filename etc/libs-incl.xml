@@ -3,9 +3,11 @@
 <project name="library-dependencies">
   <fileset dir="${libs.dir}" id="pulse.libs">
     <include name="commons-collections.jar"/>
+    <include name="commons-io.jar"/>
     <include name="depot.jar"/>
     <include name="google-collect.jar"/>
     <include name="guice.jar"/>
+    <include name="json.jar"/>
     <include name="junit4.jar"/>
     <include name="narya-base.jar"/>
     <include name="narya-distrib.jar"/>
