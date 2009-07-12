@@ -3,7 +3,6 @@
 <project name="library-dependencies">
   <fileset dir="${libs.dir}" id="pulse.libs">
     <include name="commons-collections.jar"/>
-    <include name="commons-io.jar"/>
     <include name="depot.jar"/>
     <include name="google-collect.jar"/>
     <include name="guice.jar"/>

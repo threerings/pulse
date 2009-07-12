@@ -1,3 +1,6 @@
+//
+// $Id$
+
 package com.threerings.pulse.web.server;
 
 import java.io.IOException;
@@ -11,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.json.JSONException;
@@ -20,8 +22,8 @@ import org.json.JSONWriter;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 
+import com.samskivert.io.StreamUtil;
 import com.samskivert.servlet.util.ParameterUtil;
-
 import com.samskivert.velocity.VelocityUtil;
 
 import com.threerings.pulse.server.persist.PulseRecord;
@@ -66,7 +68,7 @@ public class PulseFlotServlet extends HttpServlet
                 } else {
                     log("Unknown content type for " + path);
                 }
-                IOUtils.copy(in, resp.getOutputStream());
+                StreamUtil.copy(in, resp.getOutputStream());
             } else {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
@@ -146,12 +148,10 @@ public class PulseFlotServlet extends HttpServlet
     }
 
     protected VelocityEngine _velocity;
-
     protected Map<String, RecordInfo> _records = Maps.newHashMap();
 
-    protected static final String RSRC_BASE = "com/threerings/pulse/web/server/rsrc";
-
-    protected static final String GRAPHS_TMPL = "com/threerings/pulse/web/server/flot_graphs.tmpl";
-
     @Inject protected PulseRepository _pulseRepo;
+
+    protected static final String RSRC_BASE = "com/threerings/pulse/web/server/rsrc";
+    protected static final String GRAPHS_TMPL = "com/threerings/pulse/web/server/flot_graphs.tmpl";
 }
