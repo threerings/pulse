@@ -1,12 +1,13 @@
 function pulse(records) {
     var data = {};
     var chart;
+    var knownServers = {};
+    var servers = new panopticon.ui.CheckBoxes("Servers", 'servers', []);
     var selectors = panopticon.transform(records, function(recordType, fields) {
         if (fields.length == 0) {
             return;
         }
-        var checks = new panopticon.ui.CheckBoxes(recordType, recordType,
-                fields, true, false);
+        var select = new panopticon.ui.MultiSelect(recordType, recordType, fields);
         function getData(field, checked) {
             var fullName = recordType + "." + field;
             if (checked && !data.hasOwnProperty(fullName)) {
@@ -17,25 +18,36 @@ function pulse(records) {
                     field : field
                 };
                 $.getJSON("", params, function(results) {
-                            data[fullName] = results.records;
-                            if (chart) {
-                                chart.plot();
-                            }
-                        });
+                        panopticon.each(results.records, function(record) {
+                                if (!knownServers[record[0]]) {
+                                    knownServers[record[0]] = true;
+                                    servers.names.push([record[0], record[0]]);
+                                    panopticon.fragment.get(servers.id, []);
+                                    $("#" + servers.id).replaceWith(servers.makeHtml());
+                                    chart.resetControlInput();
+                                }
+                            });
+                        data[fullName] = results.records;
+                        if (chart) {
+                            chart.plotLater();
+                        }
+                    });
             }
         }
-        checks.extract = function() {
-            var result = panopticon.ui.CheckBoxes.prototype.extract.call(checks);
+        select.extract = function() {
+            var result = panopticon.ui.MultiSelect.prototype.extract.call(select);
             panopticon.each(result, getData);
             return result;
         };
-        checks.makeHtml = function() {
-            var result = panopticon.ui.CheckBoxes.prototype.makeHtml.call(checks);
-            panopticon.each(checks.value, getData);
+        select.makeHtml = function() {
+            var result = panopticon.ui.MultiSelect.prototype.makeHtml.call(select);
+            panopticon.each(select.value, getData);
             return result;
         };
-        return checks;
+        return select;
     });
+    var controls = selectors.slice();
+    controls.push(servers);
     chart = new panopticon.chart.Chart(function() {
         var collector = new panopticon.Collector();
         panopticon.each(selectors, function(selector) {
@@ -47,16 +59,17 @@ function pulse(records) {
                     return;
                 }
                 panopticon.each(data[selector.id + "." + field], function(record) {
-                    collector.assume(field + " " + record[0]).push(
-                            [ record[1], record[2] ]);
+                        if (servers.value[record[0]]) {
+                            collector.assume(field + " " + record[0]).push([record[1], record[2]]);
+                        }
                 });
             });
         });
         return collector.toValues();
     }, {
-        controls : selectors,
-        xaxis : {
-            mode : "time"
+        controls: controls,
+        xaxis: {
+            mode: "time"
         }
     });
 
