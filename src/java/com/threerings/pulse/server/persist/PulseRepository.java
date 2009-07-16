@@ -29,7 +29,7 @@ import com.threerings.pulse.util.PulseUtil;
 @Singleton
 public class PulseRepository extends DepotRepository
 {
-    @Inject public PulseRepository (PersistenceContext ctx)
+    @Inject public PulseRepository (@PulseDatabase PersistenceContext ctx)
     {
         super(ctx);
     }
