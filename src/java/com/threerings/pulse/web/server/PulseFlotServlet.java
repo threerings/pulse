@@ -5,7 +5,6 @@ package com.threerings.pulse.web.server;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
 
@@ -70,7 +69,7 @@ public class PulseFlotServlet extends HttpServlet
                 }
                 StreamUtil.copy(in, resp.getOutputStream());
             } else {
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
         } else {
             String recordName = ParameterUtil.getParameter(req, "record", true);
@@ -88,6 +87,7 @@ public class PulseFlotServlet extends HttpServlet
     protected void sendIndexPage (HttpServletResponse resp)
         throws IOException
     {
+        resp.setContentType("text/html");
         StringWriter writer = new StringWriter();
         JSONWriter jsonWriter = new JSONWriter(writer);
 
@@ -125,10 +125,9 @@ public class PulseFlotServlet extends HttpServlet
         RecordInfo info = _records.get(recordName);
         RecordInfo.FieldInfo field = info.getField(fieldName);
         resp.setContentType("application/json");
-        PrintWriter out = resp.getWriter();
+        resp.setCharacterEncoding("UTF-8");
 
-        JSONWriter json = new JSONWriter(out);
-
+        JSONWriter json = new JSONWriter(resp.getWriter());
         int days = 1; // TODO
         try {
             json.object().key("records").array();
