@@ -1,33 +1,37 @@
 function pulse(records) {
-    var data = {};
+    eval(bedrock.include({
+                'bedrock.util':['log'],
+                'bedrock.iter':['each', 'map'],
+                'bedrock.collections':['List', 'Dict', 'ListDict', 'Set']
+            }));
+    var data = new Dict();
     var chart;
-    var knownServers = {};
+    var knownServers = new Set();
     var servers = new panopticon.ui.CheckBoxes("Servers", 'servers', []);
-    var selectors = panopticon.transform(records, function(recordType, fields) {
+    var selectors = new List(records, function(recordType, fields) {
         if (fields.length == 0) {
             return;
         }
         var select = new panopticon.ui.MultiSelect(recordType, recordType, fields);
         function getData(field, checked) {
             var fullName = recordType + "." + field;
-            if (checked && !data.hasOwnProperty(fullName)) {
+            if (checked && !data.has(fullName)) {
                 // Stick an empty list in there to keep us from trying again while waiting
-                data[fullName] = [];
+                data.put(fullName, []);
                 var params = {
                     record : recordType,
                     field : field
                 };
                 $.getJSON("", params, function(results) {
-                        panopticon.each(results.records, function(record) {
-                                if (!knownServers[record[0]]) {
-                                    knownServers[record[0]] = true;
+                        each(results.records, function(record) {
+                                if (knownServers.add(record[0])) {
                                     servers.names.push([record[0], record[0]]);
                                     panopticon.fragment.get(servers.id, []);
                                     $("#" + servers.id).replaceWith(servers.makeHtml());
                                     chart.resetControlInput();
                                 }
                             });
-                        data[fullName] = results.records;
+                        data.put(fullName, results.records);
                         if (chart) {
                             chart.plotLater();
                         }
@@ -36,12 +40,12 @@ function pulse(records) {
         }
         select.extract = function() {
             var result = panopticon.ui.MultiSelect.prototype.extract.call(select);
-            panopticon.each(result, getData);
+            each(result, getData);
             return result;
         };
         select.makeHtml = function() {
             var result = panopticon.ui.MultiSelect.prototype.makeHtml.call(select);
-            panopticon.each(select.value, getData);
+            each(select.value, getData);
             return result;
         };
         return select;
@@ -49,28 +53,29 @@ function pulse(records) {
     var controls = selectors.slice();
     controls.push(servers);
     chart = new panopticon.chart.Chart(function() {
-        var collector = new panopticon.Collector();
-        panopticon.each(selectors, function(selector) {
-            panopticon.each(selector.value, function(field, selected) {
-                if (!selected) {
-                    return;
-                }
-                if (!data.hasOwnProperty(selector.id + "." + field)) {
-                    return;
-                }
-                panopticon.each(data[selector.id + "." + field], function(record) {
-                        if (servers.value[record[0]]) {
-                            collector.assume(field + " " + record[0]).push([record[1], record[2]]);
-                        }
+            var collector = new ListDict();
+            selectors.each(function(selector) {
+                    selector.value.each(function(field) {
+                            if (!data.has(selector.id + "." + field)) {
+                                return;
+                            }
+                            data.get(selector.id + "." + field).each(
+                                function(record) {
+                                    if (servers.has(record[0])) {
+                                        var value = [record[1], record[2]];
+                                        collector.assume(field + " " + record[0]).push(value);
+                                    }
+                                });
+                        });
                 });
-            });
+            return collector.items(function(key, value) {
+                    return {label: key, data:value}
+                });
+        }, {
+            controls: controls,
+            xaxis: {
+                mode: "time"
+            }
         });
-        return collector.toValues();
-    }, {
-        controls: controls,
-        xaxis: {
-            mode: "time"
-        }
-    });
 
 }
