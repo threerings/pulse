@@ -1,5 +1,6 @@
 function pulse(records) {
     eval(bedrock.include({
+                'bedrock':['gibs'],
                 'bedrock.util':['log'],
                 'bedrock.iter':['each', 'map'],
                 'bedrock.collections':['List', 'Dict', 'ListDict', 'Set']
@@ -26,7 +27,7 @@ function pulse(records) {
                         each(results.records, function(record) {
                                 if (knownServers.add(record[0])) {
                                     servers.names.push([record[0], record[0]]);
-                                    panopticon.fragment.get(servers.id, []);
+                                    gibs.get(servers.id, []);
                                     $("#" + servers.id).replaceWith(servers.makeHtml());
                                     chart.resetControlInput();
                                 }
@@ -59,7 +60,7 @@ function pulse(records) {
                             if (!data.has(selector.id + "." + field)) {
                                 return;
                             }
-                            data.get(selector.id + "." + field).each(
+                            each(data.get(selector.id + "." + field),
                                 function(record) {
                                     if (servers.has(record[0])) {
                                         var value = [record[1], record[2]];
