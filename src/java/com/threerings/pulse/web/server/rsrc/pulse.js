@@ -75,7 +75,7 @@ function pulse(records) {
         }, {
             controls: controls,
             xaxis: {
-                mode: "time"
+                mode: "localtime"
             }
         });
 
