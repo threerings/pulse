@@ -69,7 +69,7 @@ public class PulseManager
     public void init (String server)
     {
         _server = server;
-        _pulser.schedule(PULSE_RECORD_FREQ, true);
+        _pulser.schedule(0, PULSE_RECORD_FREQ, true);
     }
 
     /**
