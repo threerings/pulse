@@ -5,6 +5,8 @@ package com.threerings.pulse.util;
 
 import java.util.Calendar;
 
+import com.samskivert.util.CalendarUtil;
+
 /**
  * Utility methods.
  */
@@ -17,11 +19,7 @@ public class PulseUtil
      */
     public static long getStart (int daysAgo)
     {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+        Calendar cal = CalendarUtil.zeroTime(Calendar.getInstance());
         cal.add(Calendar.DATE, -daysAgo);
         return cal.getTimeInMillis();
     }
