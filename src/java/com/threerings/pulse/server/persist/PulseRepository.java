@@ -16,12 +16,11 @@ import com.google.inject.Singleton;
 import com.samskivert.depot.DepotRepository;
 import com.samskivert.depot.PersistenceContext;
 import com.samskivert.depot.PersistentRecord;
+import com.samskivert.util.Calendars;
 import com.samskivert.depot.clause.OrderBy;
 import com.samskivert.depot.clause.Where;
 import com.samskivert.depot.operator.GreaterThanEquals;
 import com.samskivert.depot.operator.LessThan;
-
-import com.threerings.pulse.util.PulseUtil;
 
 /**
  * Provides for the writing and reading of pulse records.
@@ -76,7 +75,7 @@ public class PulseRepository extends DepotRepository
     public void pruneData ()
     {
         // delete everything older than our prune cutoff (keep whole days)
-        Timestamp cutoff = new Timestamp(PulseUtil.getStart(PRUNE_DAYS));
+        Timestamp cutoff = Calendars.now().zeroTime().addDays(-PRUNE_DAYS).toTimestamp();
         for (Class<? extends PersistentRecord> type : getPulseRecords()) {
             // no need to invalidate the cache, so pass null for the invalidator
             deleteAll(type, new Where(new LessThan(PulseRecord.RECORDED.as(type), cutoff)), null);

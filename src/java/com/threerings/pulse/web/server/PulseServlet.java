@@ -25,13 +25,13 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
 import com.samskivert.servlet.util.ParameterUtil;
+import com.samskivert.util.Calendars;
 import com.samskivert.util.StringUtil;
 import com.samskivert.velocity.FormTool;
 import com.samskivert.velocity.VelocityUtil;
 
 import com.threerings.pulse.server.persist.PulseRecord;
 import com.threerings.pulse.server.persist.PulseRepository;
-import com.threerings.pulse.util.PulseUtil;
 
 /**
  * Displays our pulse datasets via a simple web interface. This servlet must have its dependencies
@@ -119,7 +119,7 @@ public class PulseServlet extends HttpServlet
     {
         VelocityContext ctx = createContext(req);
         int days = 1; // TODO
-        long start = PulseUtil.getStart(days);
+        long start = Calendars.now().zeroTime().addDays(-days).toTime();
 
         List<GraphData> graphs = Lists.newArrayList();
         ctx.put("graphs", graphs);
