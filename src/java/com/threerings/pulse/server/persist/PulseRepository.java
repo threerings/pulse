@@ -19,8 +19,6 @@ import com.samskivert.depot.PersistentRecord;
 import com.samskivert.util.Calendars;
 import com.samskivert.depot.clause.OrderBy;
 import com.samskivert.depot.clause.Where;
-import com.samskivert.depot.operator.GreaterThanEquals;
-import com.samskivert.depot.operator.LessThan;
 
 /**
  * Provides for the writing and reading of pulse records.
@@ -57,7 +55,7 @@ public class PulseRepository extends DepotRepository
     public <T extends PulseRecord> Collection<T> loadPulseHistory (Class<T> type, int days)
     {
         Timestamp time = new Timestamp(System.currentTimeMillis() - days*24*60*60*1000L);
-        return findAll(type, new Where(new GreaterThanEquals(PulseRecord.RECORDED.as(type), time)),
+        return findAll(type, new Where(PulseRecord.RECORDED.as(type).greaterEq(time)),
                        OrderBy.ascending(PulseRecord.RECORDED.as(type)));
     }
 
@@ -78,7 +76,7 @@ public class PulseRepository extends DepotRepository
         Timestamp cutoff = Calendars.now().zeroTime().addDays(-PRUNE_DAYS).toTimestamp();
         for (Class<? extends PersistentRecord> type : getPulseRecords()) {
             // no need to invalidate the cache, so pass null for the invalidator
-            deleteAll(type, new Where(new LessThan(PulseRecord.RECORDED.as(type), cutoff)), null);
+            deleteAll(type, new Where(PulseRecord.RECORDED.as(type).lessThan(cutoff)), null);
         }
     }
 
