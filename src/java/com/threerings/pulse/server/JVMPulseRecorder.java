@@ -22,8 +22,8 @@ public class JVMPulseRecorder implements PulseManager.Recorder
     {
         JVMPulseRecord record = new JVMPulseRecord();
         Runtime rt = Runtime.getRuntime();
-        record.usedHeap = (int)(rt.totalMemory()/MEGA);
-        record.totalHeap = (int)((rt.totalMemory() - rt.freeMemory())/MEGA);
+        record.usedHeap = (int)((rt.totalMemory() - rt.freeMemory())/MEGA);
+        record.totalHeap = (int)(rt.totalMemory()/MEGA);
         record.maxHeap = (int)(rt.maxMemory()/MEGA);
         return record;
     }
