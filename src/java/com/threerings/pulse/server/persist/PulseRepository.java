@@ -20,15 +20,26 @@ import com.samskivert.util.Calendars;
 import com.samskivert.depot.clause.OrderBy;
 import com.samskivert.depot.clause.Where;
 
+import com.threerings.pulse.server.AbstractPulseManager.Recorder;
+
 /**
  * Provides for the writing and reading of pulse records.
  */
 @Singleton
 public class PulseRepository extends DepotRepository
 {
-    @Inject public PulseRepository (@PulseDatabase PersistenceContext ctx)
+    @Inject public PulseRepository (@PulseDatabase PersistenceContext ctx,
+        Set<Recorder> recorders)
     {
         super(ctx);
+        for (Recorder recorder : recorders) {
+            addPulseRecord(recorder.getRecordClass());
+        }
+    }
+
+    public void addPulseRecord (Class<? extends PulseRecord> record)
+    {
+        _records.add(record);
     }
 
     /**
@@ -37,15 +48,6 @@ public class PulseRepository extends DepotRepository
     public Set<Class<? extends PulseRecord>> getPulseRecords ()
     {
         return Collections.unmodifiableSet(_records);
-    }
-
-    /**
-     * Notes that the supplied record will be managed by this repository. This must be called
-     * before the repository is initialized to avoid lazy initialization warnings.
-     */
-    public void addPulseRecord (Class<? extends PulseRecord> record)
-    {
-        _records.add(record);
     }
 
     /**

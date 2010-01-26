@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import com.samskivert.depot.PersistenceContext;
 import com.samskivert.depot.Stats.Snapshot;
 
-import com.threerings.pulse.server.PulseManager.Recorder;
+import com.threerings.pulse.server.AbstractPulseManager.Recorder;
 import com.threerings.pulse.server.persist.DepotPulseRecord;
 import com.threerings.pulse.server.persist.PulseRecord;
 

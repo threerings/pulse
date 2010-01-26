@@ -13,7 +13,7 @@ import com.threerings.pulse.server.persist.PulseRecord;
 /**
  * Collects information on the Presents Peer system.
  */
-public class PeerPulseRecorder implements PulseManager.Recorder
+public class PeerPulseRecorder implements AbstractPulseManager.Recorder
 {
     // from interface PulseManager.Recorder
     public Class<? extends PulseRecord> getRecordClass ()

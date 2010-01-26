@@ -9,7 +9,7 @@ import com.threerings.pulse.server.persist.PulseRecord;
 /**
  * Records JVM stats.
  */
-public class JVMPulseRecorder implements PulseManager.Recorder
+public class JVMPulseRecorder implements AbstractPulseManager.Recorder
 {
     // from interface PulseManager.Recorder
     public Class<? extends PulseRecord> getRecordClass ()

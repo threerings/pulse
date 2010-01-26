@@ -16,7 +16,7 @@ import com.threerings.pulse.server.persist.PresentsPulseRecord;
 /**
  * Obtains and records various basic Presents statistics.
  */
-public class PresentsPulseRecorder implements PulseManager.Recorder
+public class PresentsPulseRecorder implements AbstractPulseManager.Recorder
 {
     // from interface PulseManager.Recorder
     public Class<? extends PulseRecord> getRecordClass ()

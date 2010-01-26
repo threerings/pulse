@@ -6,6 +6,7 @@
     <include name="depot.jar"/>
     <include name="google-collect.jar"/>
     <include name="guice.jar"/>
+    <include name="guice-multibindings.jar"/>
     <include name="json.jar"/>
     <include name="junit4.jar"/>
     <include name="narya-base.jar"/>

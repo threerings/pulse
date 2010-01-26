@@ -13,7 +13,7 @@ import com.samskivert.depot.PersistenceContext;
  * An annotation that identifies the {@link PersistenceContext} used by pulse.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD, ElementType.PARAMETER })
+@Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
 @BindingAnnotation
 public @interface PulseDatabase
 {

@@ -20,9 +20,12 @@ public abstract class PulseRecord extends PersistentRecord
     public static final ColumnExp SERVER = colexp(_R, "server");
     // AUTO-GENERATED: FIELDS END
 
-    /** The time at which this data was sampled and recorded. */
+    /** The time at which this data was sampled and recorded. Will be filled in by PulseManager. */
     @Id public Timestamp recorded;
 
-    /** The server that sampled and recorded the data. */
+    /**
+     * The server that sampled and recorded the data. If not set when given to PulseManager, will
+     * be filled in with the server value on the manager.
+     */
     @Id public String server;
 }
