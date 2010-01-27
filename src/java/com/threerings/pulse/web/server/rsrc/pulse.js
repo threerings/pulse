@@ -28,7 +28,6 @@ function pulse(records) {
                         return;
                     }
                     $.getJSON("", params, function(results) {
-                            log("got", results.records, "from", params.start);
                             var existing = data.get(fullName);
                             each(results.records, function(record) {
                                     // Update later requests to start at our last point
