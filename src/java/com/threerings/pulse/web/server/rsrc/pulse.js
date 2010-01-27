@@ -2,7 +2,7 @@ function pulse(records) {
     eval(bedrock.include({
                 'bedrock':['gibs'],
                 'bedrock.util':['log'],
-                'bedrock.iter':['each', 'map'],
+                'bedrock.iter':['each'],
                 'bedrock.collections':['List', 'Dict', 'ListDict', 'Set']
             }));
     var data = new Dict();
@@ -23,20 +23,33 @@ function pulse(records) {
                     record : recordType,
                     field : field
                 };
-                $.getJSON("", params, function(results) {
-                        each(results.records, function(record) {
-                                if (knownServers.add(record[0])) {
-                                    servers.names.push([record[0], record[0]]);
-                                    gibs.get(servers.id, []);
-                                    $("#" + servers.id).replaceWith(servers.makeHtml());
-                                    chart.resetControlInput();
-                                }
-                            });
-                        data.put(fullName, results.records);
+                function update() {
+                    if (!select.has(field)) {
+                        return;
+                    }
+                    $.getJSON("", params, function(results) {
+                            log("got", results.records, "from", params.start);
+                            var existing = data.get(fullName);
+                            each(results.records, function(record) {
+                                    // Update later requests to start at our last point
+                                    if (params.start === undefined || record[1] > params.start) {
+                                        params.start = record[1] + 1;
+                                    }
+                                    if (knownServers.add(record[0])) {
+                                        servers.names.push([record[0], record[0]]);
+                                        gibs.get(servers.id, []);
+                                        $("#" + servers.id).replaceWith(servers.makeHtml());
+                                        chart.resetControlInput();
+                                    }
+                                    existing.push(record);
+                                });
                         if (chart) {
                             chart.plotLater();
                         }
                     });
+                }
+                setInterval(update, 3 * 60 * 1000);
+                update();
             }
         }
         select.extract = function() {

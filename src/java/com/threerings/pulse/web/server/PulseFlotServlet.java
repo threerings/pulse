@@ -3,10 +3,12 @@
 
 package com.threerings.pulse.web.server;
 
+import java.util.Map;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.Map;
+import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,11 +24,14 @@ import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 
 import com.samskivert.io.StreamUtil;
-import com.samskivert.servlet.util.ParameterUtil;
+import com.samskivert.util.Calendars;
+
 import com.samskivert.velocity.VelocityUtil;
 
 import com.threerings.pulse.server.persist.PulseRecord;
 import com.threerings.pulse.server.persist.PulseRepository;
+
+import static com.threerings.pulse.web.server.Converters.TO_LONG;
 
 /**
  * Displays our pulse datasets via flot charts. This servlet must have its dependencies injected.
@@ -72,11 +77,12 @@ public class PulseFlotServlet extends HttpServlet
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
         } else {
-            String recordName = ParameterUtil.getParameter(req, "record", true);
+            Parameters params = new Parameters(req);
+            String recordName = params.get("record");
             if (recordName == null) {
                 sendIndexPage(resp);
             } else {
-                sendJsonRecords(resp, recordName, ParameterUtil.getParameter(req, "field", true));
+                sendJsonRecords(params, resp, recordName);
             }
         }
     }
@@ -119,19 +125,20 @@ public class PulseFlotServlet extends HttpServlet
      * The object contains a field <code>records</code>, which contains an Array of Arrays of
      * server name, pulse time and record value.
      */
-    protected void sendJsonRecords (HttpServletResponse resp, String recordName, String fieldName)
+    protected void sendJsonRecords (Parameters params, HttpServletResponse resp, String recordName)
         throws IOException
     {
+        long startStamp = params.get("start", TO_LONG, Calendars.now().addDays(-2).toTime());
+        Timestamp start = new Timestamp(startStamp);
         RecordInfo info = _records.get(recordName);
-        RecordInfo.FieldInfo field = info.getField(fieldName);
+        RecordInfo.FieldInfo field = info.getField(params.require("field"));
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
         JSONWriter json = new JSONWriter(resp.getWriter());
-        int days = 1; // TODO
         try {
             json.object().key("records").array();
-            for (PulseRecord record : _pulseRepo.loadPulseHistory(info.clazz, days)) {
+            for (PulseRecord record : _pulseRepo.loadPulseHistory(info.clazz, start)) {
                 json.array();
                 json.value(record.server);
                 // Break Timestamps out into a long so it's directly usable from

@@ -5,6 +5,7 @@ package com.threerings.pulse.web.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
@@ -45,7 +46,7 @@ public class PulseServlet extends HttpServlet
     {
         public final RecordInfo.FieldInfo field;
 
-        public GraphData (long start, RecordInfo.FieldInfo field, String server,
+        public GraphData (RecordInfo.FieldInfo field, String server,
                           Collection<PulseRecord> records) {
             this.field = field;
 
@@ -118,8 +119,7 @@ public class PulseServlet extends HttpServlet
         throws IOException
     {
         VelocityContext ctx = createContext(req);
-        int days = 1; // TODO
-        long start = Calendars.now().zeroTime().addDays(-days).toTime();
+        Timestamp start = Calendars.now().addDays(-1).toTimestamp(); // TODO
 
         List<GraphData> graphs = Lists.newArrayList();
         ctx.put("graphs", graphs);
@@ -130,12 +130,12 @@ public class PulseServlet extends HttpServlet
                 if (ParameterUtil.isSet(req, field.getId())) {
                     if (data == null) {
                         data = ArrayListMultimap.create();
-                        for (PulseRecord record : _pulseRepo.loadPulseHistory(info.clazz, days)) {
+                        for (PulseRecord record : _pulseRepo.loadPulseHistory(info.clazz, start)) {
                             data.put(record.server, record);
                         }
                     }
                     for (String server : Sets.newTreeSet(data.keySet())) {
-                        graphs.add(new GraphData(start, field, server, data.get(server)));
+                        graphs.add(new GraphData(field, server, data.get(server)));
                     }
                 }
             }

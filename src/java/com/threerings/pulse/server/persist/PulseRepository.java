@@ -51,14 +51,12 @@ public class PulseRepository extends DepotRepository
     }
 
     /**
-     * Loads the data for the supplied set of records for the specified number of days. One day is
-     * the last 24 hours, two days, the last 48, etc.
+     * Loads the data for the given type of record after the given timestamp.
      */
-    public <T extends PulseRecord> Collection<T> loadPulseHistory (Class<T> type, int days)
+    public <T extends PulseRecord> Collection<T> loadPulseHistory (Class<T> type, Timestamp from)
     {
-        Timestamp time = new Timestamp(System.currentTimeMillis() - days*24*60*60*1000L);
-        return findAll(type, new Where(PulseRecord.RECORDED.as(type).greaterEq(time)),
-                       OrderBy.ascending(PulseRecord.RECORDED.as(type)));
+        return findAll(type, new Where(PulseRecord.RECORDED.as(type).greaterEq(from)),
+            OrderBy.ascending(PulseRecord.RECORDED.as(type)));
     }
 
     /**
