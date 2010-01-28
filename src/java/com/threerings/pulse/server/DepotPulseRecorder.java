@@ -56,6 +56,7 @@ public class DepotPulseRecorder implements Recorder
             record.uncachedQueries -= _previous.uncachedQueries;
             record.uncachedRecords -= _previous.uncachedRecords;
         }
+        _previous = shot;
         record.opTimeMean = record.ops / (double)(record.modifierTime + record.queryTime);
         record.server = _server;
 
