@@ -1,15 +1,14 @@
 package com.threerings.pulse.web.server;
 
 import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Iterator;
+import java.util.Collection;
+import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
 
 import com.samskivert.util.Logger;
 
@@ -18,7 +17,7 @@ import com.samskivert.util.Logger;
  */
 public class Parameters
 {
-    public Parameters (HttpServletRequest req)
+    public Parameters (ServletRequest req)
     {
         _req = req;
     }
@@ -26,23 +25,21 @@ public class Parameters
     /**
      * Returns an Iterable over all the parameter names for this request.
      */
-    public Iterable<String> names() {
-        return new Iterable<String>() {
-            public Iterator<String> iterator () {
-                @SuppressWarnings("unchecked")
-                Enumeration<String> names = _req.getParameterNames();
-                return Iterators.forEnumeration(names);
-            }};
+    public Set<String> names ()
+    {
+        @SuppressWarnings("unchecked")
+        Set<String> names = _req.getParameterMap().keySet();
+        return names;
     }
 
     /**
-     * Returns an Iterable over all the parameter values for this request.
+     * Returns a Collection of all the parameter values for this request.
      */
-    public Iterable<String[]> values() {
-        return Iterables.transform(names(), new Function<String, String[]>(){
-            public String[] apply (String name) {
-                return _req.getParameterValues(name);
-            }});
+    public Collection<String[]> values ()
+    {
+        @SuppressWarnings("unchecked")
+        Collection<String[]> vals = _req.getParameterMap().values();
+        return vals;
     }
 
     /**
@@ -183,5 +180,5 @@ public class Parameters
         }
     }
 
-    protected final HttpServletRequest _req;
+    protected final ServletRequest _req;
 }
