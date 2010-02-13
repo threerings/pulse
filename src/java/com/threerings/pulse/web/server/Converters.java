@@ -15,4 +15,10 @@ public class Converters
             return Boolean.parseBoolean(from);
         }
     };
+
+    public static final Function<String, Integer> TO_INT = new Function<String, Integer>() {
+        public Integer apply (String from) {
+            return Integer.parseInt(from);
+        }
+    };
 }
