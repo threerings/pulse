@@ -24,6 +24,7 @@ import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 
 import com.samskivert.io.StreamUtil;
+import com.samskivert.net.PathUtil;
 import com.samskivert.util.Calendars;
 
 import com.samskivert.velocity.VelocityUtil;
@@ -58,10 +59,10 @@ public class PulseFlotServlet extends HttpServlet
         throws IOException
     {
         String path = req.getPathInfo();
-        if (path.length() > 1) {
+        if (path != null && path.length() > 1) {
             // If anything other than / is requested, try to serve up a resource from the classpath
             ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
-            InputStream in = contextLoader.getResourceAsStream(RSRC_BASE + path);
+            InputStream in = contextLoader.getResourceAsStream(PathUtil.appendPath(RSRC_BASE, path));
             if (in != null) {
                 // It'd be nice if there were some exposed mimetype database in Java, but I guess
                 // this will do
