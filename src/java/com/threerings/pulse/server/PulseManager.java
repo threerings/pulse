@@ -16,9 +16,9 @@ import com.samskivert.jdbc.WriteOnlyUnit;
 public class PulseManager extends AbstractPulseManager
 {
     @Override
-    protected void schedule (Runnable toRun, long initialDelay, long period)
+    protected void schedule (Runnable toRun, long initialDelay, long delay)
     {
-        _executor.scheduleAtFixedRate(toRun, initialDelay, period, TimeUnit.MILLISECONDS);
+        _executor.scheduleWithFixedDelay(toRun, initialDelay, delay, TimeUnit.MILLISECONDS);
     }
 
     @Override
