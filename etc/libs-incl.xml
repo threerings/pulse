@@ -4,7 +4,7 @@
   <fileset dir="${libs.dir}" id="pulse.libs">
     <include name="commons-collections.jar"/>
     <include name="depot.jar"/>
-    <include name="google-collect.jar"/>
+    <include name="guava.jar"/>
     <include name="guice.jar"/>
     <include name="guice-multibindings.jar"/>
     <include name="json.jar"/>
