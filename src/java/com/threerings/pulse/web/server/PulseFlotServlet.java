@@ -31,8 +31,10 @@ import com.samskivert.velocity.VelocityUtil;
 
 import com.threerings.pulse.server.persist.PulseRecord;
 import com.threerings.pulse.server.persist.PulseRepository;
+import com.threerings.servlet.util.Parameters;
 
-import static com.threerings.pulse.web.server.Converters.TO_LONG;
+import static com.threerings.servlet.util.Converters.TO_LONG;
+
 
 /**
  * Displays our pulse datasets via flot charts. This servlet must have its dependencies injected.

@@ -13,6 +13,7 @@
     <include name="narya-distrib.jar"/>
     <include name="samskivert.jar"/>
     <include name="servlet-api.jar"/>
+    <include name="threerings.jar"/>
     <include name="velocity-1.5-dev.jar"/>
   </fileset>
 </project>
