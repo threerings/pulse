@@ -22,6 +22,7 @@ import org.json.JSONWriter;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import com.samskivert.io.StreamUtil;
 import com.samskivert.net.PathUtil;
@@ -39,6 +40,7 @@ import static com.threerings.servlet.util.Converters.TO_LONG;
 /**
  * Displays our pulse datasets via flot charts. This servlet must have its dependencies injected.
  */
+@Singleton
 public class PulseFlotServlet extends HttpServlet
 {
     @Override // from HttpServlet
