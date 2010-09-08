@@ -7,6 +7,8 @@
     <include name="guava.jar"/>
     <include name="guice.jar"/>
     <include name="guice-multibindings.jar"/>
+    <include name="jetty.jar"/>
+    <include name="jetty-util.jar"/>
     <include name="json.jar"/>
     <include name="junit4.jar"/>
     <include name="narya-base.jar"/>

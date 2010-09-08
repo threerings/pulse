@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<!-- build configuration -->
+<project name="pulse-checks" basedir=".">
+
+  <!-- checks to see which packages are available -->
+  <target name="check-available">
+    <echo level="info">The packages required for building are listed below. A package</echo>
+    <echo level="info">followed by 'true' indicates that the package is present.</echo>
+    <echo level="info"></echo>
+
+    <available property="jetty.present" classpathref="classpath"
+               classname="org.mortbay.jetty.Server"/>
+    <echo level="info">Jetty: ${jetty.present}</echo>
+  </target>
+
+  <!-- combines package availability into build controls -->
+  <target name="compute-builds" depends="check-available">
+    <echo level="info">The packages that will be built are listed below. One followed</echo>
+    <echo level="info">by 'true' indicates that it will be built.</echo>
+    <echo level="info"></echo>
+
+    <condition property="build.jetty">
+      <and>
+        <isset property="jetty.present"/>
+      </and>
+    </condition>
+    <echo level="info">com.threerings.pulse.jetty: ${build.jetty}</echo>
+  </target>
+</project>

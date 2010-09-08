@@ -17,6 +17,7 @@
 
   <!-- our dependencies are in a separate file -->
   <import file="etc/libs-incl.xml"/>
+  <import file="etc/depends-incl.xml"/>
 
   <!-- prepares the application directories -->
   <target name="prepare">
@@ -60,10 +61,11 @@
   </target>
 
   <!-- build the java class files -->
-  <target name="compile" depends="prepare" description="Compiles the code.">
+  <target name="compile" depends="prepare,compute-builds" description="Compiles the code.">
     <javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="false"
            debug="on" optimize="${build.optimize}" source="1.5" target="1.5" encoding="utf-8">
       <classpath refid="classpath"/>
+      <exclude name="com/threerings/pulse/jetty/**" unless="build.jetty"/>
       <compilerarg value="-Xlint"/>
       <compilerarg value="-Xlint:-serial"/>
     </javac>
