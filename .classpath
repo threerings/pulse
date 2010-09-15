@@ -4,6 +4,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="EXT_LIBS_DIR/json.jar"/>
 	<classpathentry kind="var" path="EXT_LIBS_DIR/guice-multibindings.jar"/>
+	<classpathentry kind="var" path="EXT_LIBS_DIR/jetty6/jetty.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/threerings"/>
+	<classpathentry kind="var" path="EXT_LIBS_DIR/jetty6/jetty-util.jar"/>
 	<classpathentry kind="output" path="dist/classes"/>
 </classpath>
