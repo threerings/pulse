@@ -16,6 +16,6 @@
     <include name="samskivert.jar"/>
     <include name="servlet-api.jar"/>
     <include name="threerings.jar"/>
-    <include name="velocity-1.5-dev.jar"/>
+    <include name="velocity-dev.jar"/>
   </fileset>
 </project>
