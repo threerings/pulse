@@ -11,8 +11,7 @@
     <include name="jetty-util.jar"/>
     <include name="json.jar"/>
     <include name="junit4.jar"/>
-    <include name="narya-base.jar"/>
-    <include name="narya-distrib.jar"/>
+    <include name="narya.jar"/>
     <include name="samskivert.jar"/>
     <include name="servlet-api.jar"/>
     <include name="threerings.jar"/>
