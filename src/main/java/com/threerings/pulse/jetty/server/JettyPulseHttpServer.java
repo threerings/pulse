@@ -1,5 +1,5 @@
 //
-// $Id: $
+// $Id$
 
 package com.threerings.pulse.jetty.server;
 
@@ -36,7 +36,7 @@ public class JettyPulseHttpServer extends Server
         _longResponse = longResponse;
         _reallyLongResponse = reallyLongResponse;
     }
-    
+
     public Class<? extends PulseRecord> getRecordClass ()
     {
         return JettyPulseRecord.class;
@@ -102,9 +102,10 @@ public class JettyPulseHttpServer extends Server
 
             if (processingDuration > _longResponse) {
                 String msg = (processingDuration <= _reallyLongResponse) ?
-                    "Long response generation" : "Really long response generation" ;                    
+                    "Long response generation" : "Really long response generation" ;
                 log.warning(msg, "servlet", getName(),
-                    "path", ((HttpServletRequest)req).getRequestURI(), "millis", processingDuration);
+                            "path", ((HttpServletRequest)req).getRequestURI(),
+                            "millis", processingDuration);
             }
             synchronized (_responseStatLock) {
                 _queuedRequests.addSample(((QueuedThreadPool)getThreadPool()).getQueueSize());
@@ -120,6 +121,6 @@ public class JettyPulseHttpServer extends Server
     protected RunningStats _queuedRequests = new RunningStats();
     protected final Object _responseStatLock = new Object();
 
-    final protected int _longResponse;
-    final protected int _reallyLongResponse;
+    protected final int _longResponse;
+    protected final int _reallyLongResponse;
 }
