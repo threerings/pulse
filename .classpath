@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/threerings"/>
-	<classpathentry exported="true" kind="var" path="EXT_LIBS_DIR/json.jar"/>
-	<classpathentry exported="true" kind="var" path="EXT_LIBS_DIR/guice-multibindings.jar"/>
-	<classpathentry exported="true" kind="var" path="EXT_LIBS_DIR/jetty6/jetty.jar"/>
-	<classpathentry exported="true" kind="var" path="EXT_LIBS_DIR/jetty6/jetty-util.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/google/inject/extensions/guice-multibindings/2.0/guice-multibindings-2.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mortbay/jetty/jetty-util/6.1.25/jetty-util-6.1.25.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/mortbay/jetty/jetty/6.1.25/jetty-6.1.25.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/json/json/20080701/json-20080701.jar"/>
 	<classpathentry kind="output" path="dist/classes"/>
 </classpath>
