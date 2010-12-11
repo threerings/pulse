@@ -42,8 +42,14 @@
       <classpath refid="classpath"/>
       <include name="**/*Record.java"/>
     </javac>
+
+    <path id="built.classpath">
+      <path refid="classpath"/>
+      <pathelement location="${classes.dir}"/>
+    </path>
+
     <!-- now update the source files -->
-    <grecord classpathref="classpath">
+    <grecord classpathref="built.classpath">
       <fileset dir="${src.dir}" includes="**/*Record.java"/>
     </grecord>
   </target>

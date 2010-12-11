@@ -9,7 +9,7 @@ public class DepotPulseRecord extends PulseRecord
 {
     // AUTO-GENERATED: FIELDS START
     public static final Class<DepotPulseRecord> _R = DepotPulseRecord.class;
-    public static final ColumnExp TOTAL_OPS = colexp(_R, "totalOps");
+    public static final ColumnExp OPS = colexp(_R, "ops");
     public static final ColumnExp CONNECTION_WAIT_TIME = colexp(_R, "connectionWaitTime");
     public static final ColumnExp CACHED_QUERIES = colexp(_R, "cachedQueries");
     public static final ColumnExp UNCACHED_QUERIES = colexp(_R, "uncachedQueries");
@@ -65,10 +65,10 @@ public class DepotPulseRecord extends PulseRecord
      */
     public static Key<DepotPulseRecord> getKey (Timestamp recorded, String server)
     {
-        return new Key<DepotPulseRecord>(
-                DepotPulseRecord.class,
-                new ColumnExp[] { RECORDED, SERVER },
-                new Comparable[] { recorded, server });
+        return newKey(_R, recorded, server);
     }
+
+    /** Register the key fields in an order matching the getKey() factory. */
+    static { registerKeyFields(RECORDED, SERVER); }
     // AUTO-GENERATED: METHODS END
 }
