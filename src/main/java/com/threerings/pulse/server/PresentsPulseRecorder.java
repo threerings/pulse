@@ -5,10 +5,10 @@ package com.threerings.pulse.server;
 
 import com.google.inject.Inject;
 
-import com.threerings.presents.data.ConMgrStats;
 import com.threerings.presents.server.PresentsDObjectMgr;
 import com.threerings.presents.server.PresentsInvoker;
 
+import com.threerings.nio.conman.ConMgrStats;
 import com.threerings.nio.conman.ConnectionManager;
 import com.threerings.pulse.server.persist.PulseRecord;
 import com.threerings.pulse.server.persist.PresentsPulseRecord;
