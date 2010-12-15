@@ -11,17 +11,17 @@ public class JettyPulseRecord extends PulseRecord
 {
     // AUTO-GENERATED: FIELDS START
     public static final Class<JettyPulseRecord> _R = JettyPulseRecord.class;
-    public static final ColumnExp THREADS = colexp(_R, "threads");
-    public static final ColumnExp RESPONSE_TOTAL_MEAN = colexp(_R, "responseTotalMean");
-    public static final ColumnExp RESPONSE_TOTAL_STD_DEV = colexp(_R, "responseTotalStdDev");
-    public static final ColumnExp RESPONSE_PROCESSING_MEAN = colexp(_R, "responseProcessingMean");
-    public static final ColumnExp RESPONSE_PROCESSING_STD_DEV = colexp(_R, "responseProcessingStdDev");
-    public static final ColumnExp RESPONSES = colexp(_R, "responses");
-    public static final ColumnExp EXCEPTIONS = colexp(_R, "exceptions");
-    public static final ColumnExp QUEUED_MAX = colexp(_R, "queuedMax");
-    public static final ColumnExp QUEUED_MEAN = colexp(_R, "queuedMean");
-    public static final ColumnExp RECORDED = colexp(_R, "recorded");
-    public static final ColumnExp SERVER = colexp(_R, "server");
+    public static final ColumnExp<Integer> THREADS = colexp(_R, "threads");
+    public static final ColumnExp<Double> RESPONSE_TOTAL_MEAN = colexp(_R, "responseTotalMean");
+    public static final ColumnExp<Double> RESPONSE_TOTAL_STD_DEV = colexp(_R, "responseTotalStdDev");
+    public static final ColumnExp<Double> RESPONSE_PROCESSING_MEAN = colexp(_R, "responseProcessingMean");
+    public static final ColumnExp<Double> RESPONSE_PROCESSING_STD_DEV = colexp(_R, "responseProcessingStdDev");
+    public static final ColumnExp<Integer> RESPONSES = colexp(_R, "responses");
+    public static final ColumnExp<Integer> EXCEPTIONS = colexp(_R, "exceptions");
+    public static final ColumnExp<Double> QUEUED_MAX = colexp(_R, "queuedMax");
+    public static final ColumnExp<Double> QUEUED_MEAN = colexp(_R, "queuedMean");
+    public static final ColumnExp<Timestamp> RECORDED = colexp(_R, "recorded");
+    public static final ColumnExp<String> SERVER = colexp(_R, "server");
     // AUTO-GENERATED: FIELDS END
 
     /** Increment this when making any schema changes. */

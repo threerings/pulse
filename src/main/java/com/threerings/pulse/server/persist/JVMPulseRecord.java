@@ -15,11 +15,11 @@ public class JVMPulseRecord extends PulseRecord
 {
     // AUTO-GENERATED: FIELDS START
     public static final Class<JVMPulseRecord> _R = JVMPulseRecord.class;
-    public static final ColumnExp USED_HEAP = colexp(_R, "usedHeap");
-    public static final ColumnExp TOTAL_HEAP = colexp(_R, "totalHeap");
-    public static final ColumnExp MAX_HEAP = colexp(_R, "maxHeap");
-    public static final ColumnExp RECORDED = colexp(_R, "recorded");
-    public static final ColumnExp SERVER = colexp(_R, "server");
+    public static final ColumnExp<Integer> USED_HEAP = colexp(_R, "usedHeap");
+    public static final ColumnExp<Integer> TOTAL_HEAP = colexp(_R, "totalHeap");
+    public static final ColumnExp<Integer> MAX_HEAP = colexp(_R, "maxHeap");
+    public static final ColumnExp<Timestamp> RECORDED = colexp(_R, "recorded");
+    public static final ColumnExp<String> SERVER = colexp(_R, "server");
     // AUTO-GENERATED: FIELDS END
 
     /** Increment this when making any schema changes. */

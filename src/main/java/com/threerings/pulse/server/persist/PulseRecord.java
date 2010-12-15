@@ -16,8 +16,8 @@ public abstract class PulseRecord extends PersistentRecord
 {
     // AUTO-GENERATED: FIELDS START
     public static final Class<PulseRecord> _R = PulseRecord.class;
-    public static final ColumnExp RECORDED = colexp(_R, "recorded");
-    public static final ColumnExp SERVER = colexp(_R, "server");
+    public static final ColumnExp<Timestamp> RECORDED = colexp(_R, "recorded");
+    public static final ColumnExp<String> SERVER = colexp(_R, "server");
     // AUTO-GENERATED: FIELDS END
 
     /** The time at which this data was sampled and recorded. Will be filled in by PulseManager. */

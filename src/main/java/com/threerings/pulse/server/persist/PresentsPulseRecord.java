@@ -15,20 +15,20 @@ public class PresentsPulseRecord extends PulseRecord
 {
     // AUTO-GENERATED: FIELDS START
     public static final Class<PresentsPulseRecord> _R = PresentsPulseRecord.class;
-    public static final ColumnExp EVENT_COUNT = colexp(_R, "eventCount");
-    public static final ColumnExp MAX_EVENT_QUEUE_SIZE = colexp(_R, "maxEventQueueSize");
-    public static final ColumnExp UNIT_COUNT = colexp(_R, "unitCount");
-    public static final ColumnExp MAX_INVOKER_QUEUE_SIZE = colexp(_R, "maxInvokerQueueSize");
-    public static final ColumnExp CONNECTIONS = colexp(_R, "connections");
-    public static final ColumnExp CONNECTS = colexp(_R, "connects");
-    public static final ColumnExp DISCONNECTS = colexp(_R, "disconnects");
-    public static final ColumnExp CLOSES = colexp(_R, "closes");
-    public static final ColumnExp BYTES_IN = colexp(_R, "bytesIn");
-    public static final ColumnExp BYTES_OUT = colexp(_R, "bytesOut");
-    public static final ColumnExp MSGS_IN = colexp(_R, "msgsIn");
-    public static final ColumnExp MSGS_OUT = colexp(_R, "msgsOut");
-    public static final ColumnExp RECORDED = colexp(_R, "recorded");
-    public static final ColumnExp SERVER = colexp(_R, "server");
+    public static final ColumnExp<Integer> EVENT_COUNT = colexp(_R, "eventCount");
+    public static final ColumnExp<Integer> MAX_EVENT_QUEUE_SIZE = colexp(_R, "maxEventQueueSize");
+    public static final ColumnExp<Integer> UNIT_COUNT = colexp(_R, "unitCount");
+    public static final ColumnExp<Integer> MAX_INVOKER_QUEUE_SIZE = colexp(_R, "maxInvokerQueueSize");
+    public static final ColumnExp<Integer> CONNECTIONS = colexp(_R, "connections");
+    public static final ColumnExp<Integer> CONNECTS = colexp(_R, "connects");
+    public static final ColumnExp<Integer> DISCONNECTS = colexp(_R, "disconnects");
+    public static final ColumnExp<Integer> CLOSES = colexp(_R, "closes");
+    public static final ColumnExp<Integer> BYTES_IN = colexp(_R, "bytesIn");
+    public static final ColumnExp<Integer> BYTES_OUT = colexp(_R, "bytesOut");
+    public static final ColumnExp<Integer> MSGS_IN = colexp(_R, "msgsIn");
+    public static final ColumnExp<Integer> MSGS_OUT = colexp(_R, "msgsOut");
+    public static final ColumnExp<Timestamp> RECORDED = colexp(_R, "recorded");
+    public static final ColumnExp<String> SERVER = colexp(_R, "server");
     // AUTO-GENERATED: FIELDS END
 
     /** Increment this when making any schema changes. */

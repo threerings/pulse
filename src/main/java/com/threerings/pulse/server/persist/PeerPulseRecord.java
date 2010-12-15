@@ -15,16 +15,16 @@ public class PeerPulseRecord extends PulseRecord
 {
     // AUTO-GENERATED: FIELDS START
     public static final Class<PeerPulseRecord> _R = PeerPulseRecord.class;
-    public static final ColumnExp LOCKS_ACQUIRED = colexp(_R, "locksAcquired");
-    public static final ColumnExp LOCK_ACQUIRE_WAIT = colexp(_R, "lockAcquireWait");
-    public static final ColumnExp LOCKS_RELEASED = colexp(_R, "locksReleased");
-    public static final ColumnExp LOCKS_HIJACKED = colexp(_R, "locksHijacked");
-    public static final ColumnExp LOCK_TIMEOUTS = colexp(_R, "lockTimeouts");
-    public static final ColumnExp NODE_ACTIONS_INVOKED = colexp(_R, "nodeActionsInvoked");
-    public static final ColumnExp PEER_MESSAGES_IN = colexp(_R, "peerMessagesIn");
-    public static final ColumnExp PEER_MESSAGES_OUT = colexp(_R, "peerMessagesOut");
-    public static final ColumnExp RECORDED = colexp(_R, "recorded");
-    public static final ColumnExp SERVER = colexp(_R, "server");
+    public static final ColumnExp<Integer> LOCKS_ACQUIRED = colexp(_R, "locksAcquired");
+    public static final ColumnExp<Integer> LOCK_ACQUIRE_WAIT = colexp(_R, "lockAcquireWait");
+    public static final ColumnExp<Integer> LOCKS_RELEASED = colexp(_R, "locksReleased");
+    public static final ColumnExp<Integer> LOCKS_HIJACKED = colexp(_R, "locksHijacked");
+    public static final ColumnExp<Integer> LOCK_TIMEOUTS = colexp(_R, "lockTimeouts");
+    public static final ColumnExp<Integer> NODE_ACTIONS_INVOKED = colexp(_R, "nodeActionsInvoked");
+    public static final ColumnExp<Integer> PEER_MESSAGES_IN = colexp(_R, "peerMessagesIn");
+    public static final ColumnExp<Integer> PEER_MESSAGES_OUT = colexp(_R, "peerMessagesOut");
+    public static final ColumnExp<Timestamp> RECORDED = colexp(_R, "recorded");
+    public static final ColumnExp<String> SERVER = colexp(_R, "server");
     // AUTO-GENERATED: FIELDS END
 
     /** Increment this when making any schema changes. */
