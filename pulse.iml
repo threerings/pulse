@@ -5,6 +5,7 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
@@ -29,7 +30,7 @@
     <orderEntry type="module" module-name="threerings" />
     <orderEntry type="module" module-name="samskivert" />
     <orderEntry type="module" module-name="depot" />
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://$M2_REPO$/com/google/inject/guice/2.0/guice-2.0.jar!/" />
@@ -38,7 +39,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://$M2_REPO$/com/google/guava/guava/r07/guava-r07.jar!/" />
@@ -49,7 +50,7 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="jar://$M2_REPO$/org/apache/velocity/velocity/1.6.4/velocity-1.6.4.jar!/" />
@@ -58,29 +59,29 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$EXT_LIBS_DIR$/servlet-api.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module" module-name="narya" />
-    <orderEntry type="module-library">
-      <library>
+    <orderEntry type="module-library" exported="">
+      <library name="servlet-api-2.5.jar">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/mortbay/jetty/jetty/6.1.25/jetty-6.1.25!/" />
+          <root url="jar://$M2_REPO$/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/mortbay/jetty/jetty-util/6.1.25/jetty-util-6.1.25!/" />
+          <root url="jar://$M2_REPO$/org/mortbay/jetty/jetty/6.1.25/jetty-6.1.25.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/mortbay/jetty/jetty-util/6.1.25/jetty-util-6.1.25.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
