@@ -63,6 +63,11 @@
       <groupId>org.mortbay.jetty</groupId>
       <artifactId>jetty</artifactId>
       <version>6.1.25</version>
+      <exclusions>
+        <exclusion>
+            <groupId>org.mortbay.jetty</groupId><artifactId>servlet-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
   <build>
