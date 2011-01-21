@@ -51,8 +51,8 @@
     </dependency>
     <dependency>
       <groupId>org.apache.velocity</groupId>
-      <artifactId>velocity-ooo</artifactId>
-      <version>1.6.4</version>
+      <artifactId>velocity</artifactId>
+      <version>1.6.4-ooo</version>
     </dependency>
     <dependency>
       <groupId>org.json</groupId>
