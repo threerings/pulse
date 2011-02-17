@@ -4,7 +4,7 @@
   <groupId>com.threerings</groupId>
   <artifactId>pulse</artifactId>
   <packaging>jar</packaging>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2</version>
   <name>pulse</name>
   <repositories>
     <repository>
@@ -12,6 +12,12 @@
       <url>http://build.earth.threerings.net/maven-repository</url>
     </repository>
   </repositories>
+
+  <scm>
+    <connection>scm:svn:http://src.earth.threerings.net/pulse/tags/pulse-1.2</connection>
+    <developerConnection>scm:svn:svn+ssh://src.earth.threerings.net/pulse/tags/pulse-1.2</developerConnection>
+  </scm>
+
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -41,7 +47,7 @@
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>narya</artifactId>
-      <version>1.5-SNAPSHOT</version>
+      <version>1.5</version>
     </dependency>
     <dependency>
       <groupId>com.threerings</groupId>
