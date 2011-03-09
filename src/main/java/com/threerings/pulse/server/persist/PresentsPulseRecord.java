@@ -34,16 +34,19 @@ public class PresentsPulseRecord extends PulseRecord
     /** Increment this when making any schema changes. */
     public static final int SCHEMA_VERSION = 1;
 
-    /** The number of events processed during the period. */
+    /** The number of dobject events processed during the period. */
     public int eventCount;
 
-    /** The largest event queue size seen during the period. */
+    /** The largest size of the distributed object queue during the period. */
     public int maxEventQueueSize;
 
-    /** The number of invoker units processed during the period. */
+    /**
+     * The number of invoker units processed during the period, each of which generally corresponds
+     * to a set of database operations.
+     */
     public int unitCount;
 
-    /** The largest invoker queue size seen during the period. */
+    /** The largest number of units queued to run during the period. */
     public int maxInvokerQueueSize;
 
     /** The number of dobj connections currently active. */
