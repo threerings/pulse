@@ -7,9 +7,13 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import com.google.common.collect.TreeMultimap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -17,6 +21,8 @@ import com.samskivert.depot.DepotRepository;
 import com.samskivert.depot.PersistenceContext;
 import com.samskivert.depot.PersistentRecord;
 import com.samskivert.util.Calendars;
+import com.samskivert.depot.clause.FromOverride;
+import com.samskivert.depot.clause.GroupBy;
 import com.samskivert.depot.clause.OrderBy;
 import com.samskivert.depot.clause.Where;
 
@@ -48,6 +54,38 @@ public class PulseRepository extends DepotRepository
     public Set<Class<? extends PulseRecord>> getPulseRecords ()
     {
         return Collections.unmodifiableSet(_records);
+    }
+
+    /**
+     * Retrieves and returns a multimap containing all generic "classes" as keys and each class's
+     * "fields" as values.
+     */
+    public Multimap<String, String> loadGenericInfo ()
+    {
+        // find the unique class/field pairs
+        List<ClassFieldRecord> records = findAll(ClassFieldRecord.class,
+            new FromOverride(GenericPulseRecord.class),
+            new GroupBy(GenericPulseRecord.CLAZZ, GenericPulseRecord.FIELD));
+
+        // put them in a multimap
+        Multimap<String, String> multimap = TreeMultimap.create();
+        for (ClassFieldRecord record : records) {
+            multimap.put(record.clazz, record.field);
+        }
+        return multimap;
+    }
+
+    /**
+     * Loads generic records after the given timestamp;
+     */
+    public Collection<GenericPulseRecord> loadPulseHistory (
+        String clazz, String field, Timestamp from)
+    {
+        return findAll(GenericPulseRecord.class,
+            new Where(GenericPulseRecord.CLAZZ.eq(clazz).and(
+                GenericPulseRecord.FIELD.eq(field).and(
+                    GenericPulseRecord.RECORDED.greaterEq(from)))),
+            OrderBy.ascending(GenericPulseRecord.RECORDED));
     }
 
     /**

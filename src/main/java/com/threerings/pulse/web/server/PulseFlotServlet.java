@@ -3,6 +3,7 @@
 
 package com.threerings.pulse.web.server;
 
+import java.util.Collection;
 import java.util.Map;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONWriter;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -30,12 +32,12 @@ import com.samskivert.util.Calendars;
 
 import com.samskivert.velocity.VelocityUtil;
 
+import com.threerings.pulse.server.persist.GenericPulseRecord;
 import com.threerings.pulse.server.persist.PulseRecord;
 import com.threerings.pulse.server.persist.PulseRepository;
 import com.threerings.servlet.util.Parameters;
 
 import static com.threerings.servlet.util.Converters.TO_LONG;
-
 
 /**
  * Displays our pulse datasets via flot charts. This servlet must have its dependencies injected.
@@ -105,11 +107,22 @@ public class PulseFlotServlet extends HttpServlet
         try {
             jsonWriter.object();
             for (RecordInfo info : _records.values()) {
-                jsonWriter.key(info.clazz.getSimpleName()).array();
-                for (RecordInfo.FieldInfo field : info.fields) {
-                    jsonWriter.value(field.getName());
+                if (info.clazz == GenericPulseRecord.class) {
+                    for (Map.Entry<String, Collection<String>> entry :
+                            _pulseRepo.loadGenericInfo().asMap().entrySet()) {
+                        jsonWriter.key(entry.getKey()).array();
+                        for (String field : entry.getValue()) {
+                            jsonWriter.value(field);
+                        }
+                        jsonWriter.endArray();
+                    }
+                } else {
+                    jsonWriter.key(info.clazz.getSimpleName()).array();
+                    for (RecordInfo.FieldInfo field : info.fields) {
+                        jsonWriter.value(field.getName());
+                    }
+                    jsonWriter.endArray();
                 }
-                jsonWriter.endArray();
             }
             jsonWriter.endObject();
         } catch (JSONException je) {
@@ -135,21 +148,31 @@ public class PulseFlotServlet extends HttpServlet
     {
         long startStamp = params.get("start", TO_LONG, Calendars.now().addDays(-2).toTime());
         Timestamp start = new Timestamp(startStamp);
-        RecordInfo info = _records.get(recordName);
-        RecordInfo.FieldInfo field = info.getField(params.require("field"));
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
+
+        RecordInfo info = _records.get(recordName);
+        RecordInfo.FieldInfo field = null;
+        String fname = params.require("field");
+        Collection<? extends PulseRecord> records;
+        if (info == null) {
+            records = _pulseRepo.loadPulseHistory(recordName, fname, start);
+        } else {
+            records = _pulseRepo.loadPulseHistory(info.clazz, start);
+            field = info.getField(fname);
+        }
 
         JSONWriter json = new JSONWriter(resp.getWriter());
         try {
             json.object().key("records").array();
-            for (PulseRecord record : _pulseRepo.loadPulseHistory(info.clazz, start)) {
+            for (PulseRecord record : records) {
                 json.array();
                 json.value(record.server);
                 // Break Timestamps out into a long so it's directly usable from
                 // JavaScript, otherwise it's stringified.
                 json.value(record.recorded.getTime());
-                json.value(field.getValue(record));
+                json.value(field == null ?
+                    ((GenericPulseRecord)record).value : field.getValue(record));
                 json.endArray();
             }
             json.endArray().endObject();
