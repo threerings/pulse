@@ -3,23 +3,16 @@
 
 package com.threerings.pulse.server;
 
+import java.util.List;
+
 import com.threerings.pulse.server.persist.GenericPulseRecord;
 import com.threerings.pulse.server.persist.PulseRecord;
 
 /**
  * Collects generic information.
  */
-public abstract class GenericPulseRecorder implements AbstractPulseManager.Recorder
+public abstract class GenericPulseRecorder implements AbstractPulseManager.MultipleRecorder
 {
-    /**
-     * Creates a new generic pulse recorder.
-     */
-    public GenericPulseRecorder (String clazz, String field)
-    {
-        _clazz = clazz;
-        _field = field;
-    }
-
     // from interface PulseManager.Recorder
     public Class<? extends PulseRecord> getRecordClass ()
     {
@@ -29,21 +22,34 @@ public abstract class GenericPulseRecorder implements AbstractPulseManager.Recor
     // from interface PulseManager.Recorder
     public PulseRecord takePulse (long now)
     {
-        GenericPulseRecord record = new GenericPulseRecord();
-        record.clazz = _clazz;
-        record.field = _field;
-        record.value = getValue(now);
-        return record;
+        return null;
+    }
+
+    // from interface PulseManager.MultipleRecorder
+    public void takePulse (long now, List<PulseRecord> results)
+    {
+        _results = results;
+        addValues(now);
+        _results = null;
     }
 
     /**
-     * Returns the value to record in the current pulse.
+     * Override to call {@link #add} for each value in the pulse.
      */
-    protected abstract double getValue (long now);
+    protected abstract void addValues (long now);
 
-    /** The "class" to store in the pulse record. */
-    protected String _clazz;
+    /**
+     * Adds a value to the current list.
+     */
+    protected void add (String clazz, String field, double value)
+    {
+        GenericPulseRecord record = new GenericPulseRecord();
+        record.clazz = clazz;
+        record.field = field;
+        record.value = value;
+        _results.add(record);
+    }
 
-    /** The "field" to store in the pulse record. */
-    protected String _field;
+    /** The list to which we're adding, if any. */
+    protected List<PulseRecord> _results;
 }

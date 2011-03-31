@@ -34,8 +34,21 @@ public abstract class AbstractPulseManager
          * Called periodically on the distributed object event thread to record a pulse. The
          * returned event will subsequently be written to the database. The record need not have
          * the {@link PulseRecord#recorded} nor {@link PulseRecord#server} fields filled in.
+         *
+         * @return the new pulse record, or <code>null</code> for none.
          */
         public PulseRecord takePulse (long now);
+    }
+
+    /** A recorder that generates multiple records per pulse. */
+    public interface MultipleRecorder extends Recorder
+    {
+        /**
+         * Records a pulse.
+         *
+         * @param results the list to which the pulse records should be added.
+         */
+        public void takePulse (long now, List<PulseRecord> results);
     }
 
     /** The frequency with which we record pulses. */
@@ -66,7 +79,13 @@ public abstract class AbstractPulseManager
 
         for (Recorder recorder : _recorders) {
             try {
-                pulses.add(recorder.takePulse(now));
+                PulseRecord pulse = recorder.takePulse(now);
+                if (pulse != null) {
+                    pulses.add(pulse);
+                }
+                if (recorder instanceof MultipleRecorder) {
+                    ((MultipleRecorder)recorder).takePulse(now, pulses);
+                }
             } catch (Exception e) {
                 log.warning("Recorder failed", "recorder", recorder, e);
             }
