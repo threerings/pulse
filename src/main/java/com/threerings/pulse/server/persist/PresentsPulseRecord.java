@@ -73,17 +73,4 @@ public class PresentsPulseRecord extends PulseRecord
     /** The number of messages written to our connections in this period. */
     public int msgsOut;
 
-    // AUTO-GENERATED: METHODS START
-    /**
-     * Create and return a primary {@link Key} to identify a {@link PresentsPulseRecord}
-     * with the supplied key values.
-     */
-    public static Key<PresentsPulseRecord> getKey (Timestamp recorded, String server)
-    {
-        return newKey(_R, recorded, server);
-    }
-
-    /** Register the key fields in an order matching the getKey() factory. */
-    static { registerKeyFields(RECORDED, SERVER); }
-    // AUTO-GENERATED: METHODS END
 }

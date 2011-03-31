@@ -34,17 +34,4 @@ public class JVMPulseRecord extends PulseRecord
     /** The maximum heap size in kilobytes.*/
     public int maxHeap;
 
-    // AUTO-GENERATED: METHODS START
-    /**
-     * Create and return a primary {@link Key} to identify a {@link JVMPulseRecord}
-     * with the supplied key values.
-     */
-    public static Key<JVMPulseRecord> getKey (Timestamp recorded, String server)
-    {
-        return newKey(_R, recorded, server);
-    }
-
-    /** Register the key fields in an order matching the getKey() factory. */
-    static { registerKeyFields(RECORDED, SERVER); }
-    // AUTO-GENERATED: METHODS END
 }

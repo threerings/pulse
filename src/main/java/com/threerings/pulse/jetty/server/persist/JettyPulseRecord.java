@@ -66,17 +66,4 @@ public class JettyPulseRecord extends PulseRecord
     /** Mean requests queued over this period. */
     public double queuedMean;
 
-    // AUTO-GENERATED: METHODS START
-    /**
-     * Create and return a primary {@link Key} to identify a {@link JettyPulseRecord}
-     * with the supplied key values.
-     */
-    public static Key<JettyPulseRecord> getKey (Timestamp recorded, String server)
-    {
-        return newKey(_R, recorded, server);
-    }
-
-    /** Register the key fields in an order matching the getKey() factory. */
-    static { registerKeyFields(RECORDED, SERVER); }
-    // AUTO-GENERATED: METHODS END
 }

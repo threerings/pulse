@@ -18,7 +18,7 @@ public class GenericPulseRecord extends PulseRecord
     // AUTO-GENERATED: FIELDS END
 
     /** Increment this when making any schema changes. */
-    public static final int SCHEMA_VERSION = 1;
+    public static final int SCHEMA_VERSION = 2;
 
     /** The name of the "class." */
     @Index(name="ixClazzField")
@@ -31,17 +31,4 @@ public class GenericPulseRecord extends PulseRecord
     /** The stored value. */
     public double value;
 
-    // AUTO-GENERATED: METHODS START
-    /**
-     * Create and return a primary {@link Key} to identify a {@link GenericPulseRecord}
-     * with the supplied key values.
-     */
-    public static Key<GenericPulseRecord> getKey (Timestamp recorded, String server)
-    {
-        return newKey(_R, recorded, server);
-    }
-
-    /** Register the key fields in an order matching the getKey() factory. */
-    static { registerKeyFields(RECORDED, SERVER); }
-    // AUTO-GENERATED: METHODS END
 }
