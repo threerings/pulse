@@ -23,9 +23,9 @@
   <!-- generates fields for persistent record classes -->
   <target name="genrecord" depends="prepare">
     <taskdef name="grecord" classname="com.samskivert.depot.tools.GenRecordTask"
-             classpathref="classpath"/>
+             classpathref="pom.xml.path"/>
     <!-- make sure the record class files are all compiled -->
-    <ooojavac srcdir="${src.dir}" destdir="${deploy.dir}/classes" classpathref="pom.path"/>
+    <ooojavac srcdir="${src.dir}" destdir="${deploy.dir}/classes" classpathref="pom.xml.path"/>
 
     <path id="built.classpath">
       <path refid="pom.xml.path"/>
