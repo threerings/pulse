@@ -20,11 +20,12 @@ import com.google.inject.Singleton;
 import com.samskivert.depot.DepotRepository;
 import com.samskivert.depot.PersistenceContext;
 import com.samskivert.depot.PersistentRecord;
-import com.samskivert.util.Calendars;
+import com.samskivert.depot.SchemaMigration;
 import com.samskivert.depot.clause.FromOverride;
 import com.samskivert.depot.clause.GroupBy;
 import com.samskivert.depot.clause.OrderBy;
 import com.samskivert.depot.clause.Where;
+import com.samskivert.util.Calendars;
 
 import com.threerings.pulse.server.AbstractPulseManager.Recorder;
 
@@ -41,6 +42,11 @@ public class PulseRepository extends DepotRepository
         for (Recorder recorder : recorders) {
             addPulseRecord(recorder.getRecordClass());
         }
+
+        ctx.registerMigration(GenericPulseRecord.class,
+            new SchemaMigration.Retype(4, GenericPulseRecord.CLAZZ));
+        ctx.registerMigration(GenericPulseRecord.class,
+            new SchemaMigration.Retype(4, GenericPulseRecord.FIELD));
     }
 
     public void addPulseRecord (Class<? extends PulseRecord> record)

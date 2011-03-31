@@ -3,6 +3,7 @@ package com.threerings.pulse.server.persist;
 import java.sql.Timestamp;
 
 import com.samskivert.depot.Key;
+import com.samskivert.depot.annotation.Column;
 import com.samskivert.depot.annotation.Index;
 import com.samskivert.depot.expression.ColumnExp;
 
@@ -18,14 +19,14 @@ public class GenericPulseRecord extends PulseRecord
     // AUTO-GENERATED: FIELDS END
 
     /** Increment this when making any schema changes. */
-    public static final int SCHEMA_VERSION = 2;
+    public static final int SCHEMA_VERSION = 4;
 
     /** The name of the "class." */
-    @Index(name="ixClazzField")
+    @Column(length=127) @Index(name="ixClazzField")
     public String clazz;
 
     /** The name of the "field." */
-    @Index(name="ixClazzField")
+    @Column(length=127) @Index(name="ixClazzField")
     public String field;
 
     /** The stored value. */
