@@ -3,13 +3,14 @@
 
 package com.threerings.pulse.web.server;
 
-import java.util.Collection;
-import java.util.Map;
+import static com.threerings.servlet.util.Converters.TO_LONG;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONWriter;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -36,8 +36,6 @@ import com.threerings.pulse.server.persist.GenericPulseRecord;
 import com.threerings.pulse.server.persist.PulseRecord;
 import com.threerings.pulse.server.persist.PulseRepository;
 import com.threerings.servlet.util.Parameters;
-
-import static com.threerings.servlet.util.Converters.TO_LONG;
 
 /**
  * Displays our pulse datasets via flot charts. This servlet must have its dependencies injected.

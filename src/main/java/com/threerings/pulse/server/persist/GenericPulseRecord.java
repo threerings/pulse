@@ -2,7 +2,6 @@ package com.threerings.pulse.server.persist;
 
 import java.sql.Timestamp;
 
-import com.samskivert.depot.Key;
 import com.samskivert.depot.annotation.Column;
 import com.samskivert.depot.annotation.Index;
 import com.samskivert.depot.expression.ColumnExp;

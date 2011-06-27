@@ -1,8 +1,6 @@
 package com.threerings.pulse.server.persist;
 
-import com.samskivert.depot.Key;
 import com.samskivert.depot.PersistentRecord;
-import com.samskivert.depot.annotation.Column;
 import com.samskivert.depot.annotation.Computed;
 import com.samskivert.depot.annotation.Entity;
 import com.samskivert.depot.expression.ColumnExp;
