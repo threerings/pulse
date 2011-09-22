@@ -37,22 +37,22 @@
     <dependency>
       <groupId>com.samskivert</groupId>
       <artifactId>depot</artifactId>
-      <version>1.2</version>
+      <version>1.4</version>
     </dependency>
     <dependency>
       <groupId>com.samskivert</groupId>
       <artifactId>samskivert</artifactId>
-      <version>1.1</version>
+      <version>1.4</version>
     </dependency>
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>narya</artifactId>
-      <version>1.5</version>
+      <version>1.8</version>
     </dependency>
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>threerings</artifactId>
-      <version>1.0</version>
+      <version>1.5</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
