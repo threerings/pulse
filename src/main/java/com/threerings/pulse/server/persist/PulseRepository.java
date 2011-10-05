@@ -119,7 +119,7 @@ public class PulseRepository extends DepotRepository
         Timestamp cutoff = Calendars.now().zeroTime().addDays(-PRUNE_DAYS).toTimestamp();
         for (Class<? extends PersistentRecord> type : getPulseRecords()) {
             // no need to invalidate the cache, so pass null for the invalidator
-            deleteAll(type, new Where(PulseRecord.RECORDED.as(type).lessThan(cutoff)), null);
+            deleteAll(type, new Where(PulseRecord.RECORDED.as(type).lessThan(cutoff)));
         }
     }
 

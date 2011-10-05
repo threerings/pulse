@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.threerings</groupId>
+  <parent>
+    <groupId>com.threerings</groupId>
+    <artifactId>ooo-parent</artifactId>
+    <version>1.0</version>
+  </parent>
+
   <artifactId>pulse</artifactId>
   <packaging>jar</packaging>
   <version>1.3-SNAPSHOT</version>
   <name>pulse</name>
+
   <repositories>
     <repository>
       <id>ooo</id>
@@ -20,14 +26,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>10.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.inject</groupId>
-      <artifactId>guice</artifactId>
-      <version>2.0</version>
+      <groupId>com.threerings</groupId>
+      <artifactId>ooo-util</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.google.inject.extensions</groupId>
@@ -37,23 +38,7 @@
     <dependency>
       <groupId>com.samskivert</groupId>
       <artifactId>depot</artifactId>
-      <version>1.4</version>
-    </dependency>
-    <dependency>
-      <groupId>com.samskivert</groupId>
-      <artifactId>samskivert</artifactId>
-      <version>1.4</version>
-    </dependency>
-    <dependency>
-      <groupId>com.threerings</groupId>
-      <artifactId>narya</artifactId>
-      <version>1.8</version>
-    </dependency>
-    <dependency>
-      <groupId>com.threerings</groupId>
-      <artifactId>threerings</artifactId>
       <version>1.5</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.velocity</groupId>
@@ -65,35 +50,19 @@
       <artifactId>json</artifactId>
       <version>20080701</version>
     </dependency>
+    <!-- if one is using the narya recorder, they will provide their own narya -->
+    <dependency>
+      <groupId>com.threerings</groupId>
+      <artifactId>narya</artifactId>
+      <version>1.9</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- the embedded jetty http server support is optional -->
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
       <artifactId>jetty</artifactId>
       <version>6.1.25</version>
       <optional>true</optional>
-      <exclusions>
-        <exclusion>
-            <groupId>org.mortbay.jetty</groupId><artifactId>servlet-api</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-          <fork>true</fork>
-          <showDeprecation>true</showDeprecation>
-          <showWarnings>true</showWarnings>
-          <!-- yes, those quoted spaces are a workaround sanctioned by the Maven idiocracy -->
-          <compilerArgument>-Xlint" "-Xlint:-serial" "-Xlint:-path</compilerArgument>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>
