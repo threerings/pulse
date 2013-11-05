@@ -93,8 +93,9 @@ public abstract class AbstractPulseManager
         invoke(new WriteOnlyUnit("takePulse") {
             @Override public void invokePersist () throws Exception {
                 // store the pulses we've taken
+                Timestamp nowStamp = new Timestamp(now);
                 for (PulseRecord pulse : pulses) {
-                    pulse.recorded = new Timestamp(now);
+                    pulse.recorded = nowStamp;
                     // Only set the server if there isn't a record-specific one
                     if (pulse.server == null) {
                         pulse.server = _server;
