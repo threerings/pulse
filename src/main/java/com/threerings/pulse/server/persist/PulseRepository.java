@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
@@ -60,6 +61,7 @@ public class PulseRepository extends DepotRepository
      */
     public void setPruneDays (Class<? extends PulseRecord> clazz, int days)
     {
+        Preconditions.checkArgument(days > 0);
         _pruneDays.put(clazz, days);
     }
 
