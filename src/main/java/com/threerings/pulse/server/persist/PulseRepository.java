@@ -54,6 +54,14 @@ public class PulseRepository extends DepotRepository
     }
 
     /**
+     * Set the age we allow prune days to be.
+     */
+    public void setPruneDays (int days)
+    {
+        _pruneDays = days;
+    }
+
+    /**
      * Returns the set of records tracked by this repository.
      */
     public Set<Class<? extends PulseRecord>> getPulseRecords ()
@@ -116,7 +124,7 @@ public class PulseRepository extends DepotRepository
     public void pruneData ()
     {
         // delete everything older than our prune cutoff (keep whole days)
-        Timestamp cutoff = Calendars.now().zeroTime().addDays(-PRUNE_DAYS).toTimestamp();
+        Timestamp cutoff = Calendars.now().zeroTime().addDays(-_pruneDays).toTimestamp();
         for (Class<? extends PersistentRecord> type : getPulseRecords()) {
             // no need to invalidate the cache, so pass null for the invalidator
             deleteAll(type, new Where(PulseRecord.RECORDED.as(type).lessThan(cutoff)));
@@ -137,5 +145,5 @@ public class PulseRepository extends DepotRepository
         }
     });
 
-    protected static final int PRUNE_DAYS = 7;
+    protected int _pruneDays = 7;
 }
