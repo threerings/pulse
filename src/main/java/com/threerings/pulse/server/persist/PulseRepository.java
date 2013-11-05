@@ -8,8 +8,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.google.common.collect.TreeMultimap;
@@ -54,11 +56,11 @@ public class PulseRepository extends DepotRepository
     }
 
     /**
-     * Set the number of days we keep records.
+     * Set the number of days to keep the specified record.
      */
-    public void setPruneDays (int days)
+    public void setPruneDays (Class<? extends PulseRecord> clazz, int days)
     {
-        _pruneDays = days;
+        _pruneDays.put(clazz, days);
     }
 
     /**
@@ -123,9 +125,10 @@ public class PulseRepository extends DepotRepository
      */
     public void pruneData ()
     {
-        // delete everything older than our prune cutoff (keep whole days)
-        Timestamp cutoff = Calendars.now().zeroTime().addDays(-_pruneDays).toTimestamp();
-        for (Class<? extends PersistentRecord> type : getPulseRecords()) {
+        for (Class<? extends PulseRecord> type : getPulseRecords()) {
+            // delete everything older than our prune cutoff (keep whole days)
+            Timestamp cutoff = Calendars.now().zeroTime().addDays(-getPruneDays(type))
+                .toTimestamp();
             // no need to invalidate the cache, so pass null for the invalidator
             deleteAll(type, new Where(PulseRecord.RECORDED.as(type).lessThan(cutoff)));
         }
@@ -137,6 +140,24 @@ public class PulseRepository extends DepotRepository
         classes.addAll(_records);
     }
 
+    /**
+     * Get the number of days to keep records of the specified type.
+     */
+    protected int getPruneDays (Class<? extends PulseRecord> type)
+    {
+        Integer days = _pruneDays.get(type);
+        if (days != null) {
+            return days; // found it
+
+        } else if (type == PulseRecord.class) {
+            return DEFAULT_PRUNE_DAYS; // base case
+
+        } else {
+            // check the superclass of the specified class...
+            return getPruneDays(type.getSuperclass().asSubclass(PulseRecord.class));
+        }
+    }
+
     /** The set of all pulse records managed by this repository. */
     protected Set<Class<? extends PulseRecord>> _records = Sets.newTreeSet(
         new Comparator<Class<?>>() {
@@ -145,5 +166,9 @@ public class PulseRepository extends DepotRepository
         }
     });
 
-    protected int _pruneDays = 7;
+    /** How long should we keep records for each class? */
+    protected Map<Class<? extends PulseRecord>, Integer> _pruneDays = Maps.newIdentityHashMap();
+
+    /** The default number of days to keep records. */
+    protected static final int DEFAULT_PRUNE_DAYS = 7;
 }
