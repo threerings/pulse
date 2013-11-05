@@ -68,9 +68,9 @@ public abstract class AbstractPulseManager
         schedule(_pulseTaker, 500, PULSE_RECORD_FREQ);
     }
 
-    protected abstract void schedule(Runnable toRun, long initialDelay, long period);
+    protected abstract void schedule (Runnable toRun, long initialDelay, long period);
 
-    protected abstract void invoke(WriteOnlyUnit unit);
+    protected abstract void invoke (WriteOnlyUnit unit);
 
     protected void takePulse ()
     {
