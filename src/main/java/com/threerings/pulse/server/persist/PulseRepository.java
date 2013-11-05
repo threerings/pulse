@@ -54,7 +54,7 @@ public class PulseRepository extends DepotRepository
     }
 
     /**
-     * Set the age we allow prune days to be.
+     * Set the number of days we keep records.
      */
     public void setPruneDays (int days)
     {
