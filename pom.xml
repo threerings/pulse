@@ -11,11 +11,26 @@
   <artifactId>pulse</artifactId>
   <packaging>jar</packaging>
   <version>1.5-SNAPSHOT</version>
+
   <name>pulse</name>
+  <description>A library for collecting and dispalying stats.</description>
+  <url>http://github.com/threerings/pulse</url>
+  <issueManagement>
+    <url>http://github.com/threerings/pulse/issues</url>
+  </issueManagement>
 
   <scm>
     <connection>scm:https://github.com/threerings/pulse.git</connection>
+    <url>http://github.com/threerings/pulse/</url>
   </scm>
+
+  <developers>
+    <developer>
+      <id>samskivert</id>
+      <name>Michael Bayne</name>
+      <email>mdb@samskivert.com</email>
+    </developer>
+  </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -94,6 +109,17 @@
           <show>protected</show>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.2</version>
+        <extensions>true</extensions>
+        <configuration>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+          <serverId>sonatype-nexus-staging</serverId>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -140,7 +166,36 @@
       </build>
     </profile>
 
-    <!-- For deploying to a local place -->
+    <!-- for doing proper Maven Central releases -->
+    <profile>
+      <id>release-sign-artifacts</id>
+      <activation>
+        <property><name>performRelease</name><value>true</value></property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <keyname>mdb@samskivert.com</keyname>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- for deploying to a local repository (use by OOO build server) -->
     <profile>
       <id>deploy-local</id>
       <distributionManagement>
