@@ -2,9 +2,9 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.threerings</groupId>
-    <artifactId>ooo-parent</artifactId>
-    <version>1.2</version>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
   </parent>
 
   <artifactId>pulse</artifactId>
@@ -12,16 +12,8 @@
   <version>1.5-SNAPSHOT</version>
   <name>pulse</name>
 
-  <repositories>
-    <repository>
-      <id>ooo</id>
-      <url>http://build.earth.threerings.net/maven-repository</url>
-    </repository>
-  </repositories>
-
   <scm>
-    <connection>scm:svn:http://src.earth.threerings.net/pulse/trunk/</connection>
-    <developerConnection>scm:svn:svn+ssh://src.earth.threerings.net/pulse/trunk/</developerConnection>
+    <connection>scm:https://github.com/threerings/pulse.git</connection>
   </scm>
 
   <build>
@@ -31,8 +23,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.2</version>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.6</source>
+          <target>1.6</target>
           <fork>true</fork>
           <showDeprecation>true</showDeprecation>
           <showWarnings>true</showWarnings>
@@ -47,6 +39,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
         <configuration>
           <show>protected</show>
         </configuration>
@@ -80,13 +73,15 @@
       <artifactId>json</artifactId>
       <version>20080701</version>
     </dependency>
+
     <!-- if one is using the narya recorder, they will provide their own narya -->
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>narya</artifactId>
-      <version>1.13.1</version>
+      <version>1.15</version>
       <scope>provided</scope>
     </dependency>
+
     <!-- the embedded jetty http server support is optional -->
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
