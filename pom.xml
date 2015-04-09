@@ -16,36 +16,11 @@
     <connection>scm:https://github.com/threerings/pulse.git</connection>
   </scm>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.2</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-          <fork>true</fork>
-          <showDeprecation>true</showDeprecation>
-          <showWarnings>true</showWarnings>
-          <compilerArgs>
-            <arg>-Xlint</arg>
-            <arg>-Xlint:-serial</arg>
-            <arg>-Xlint:-path</arg>
-          </compilerArgs>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9.1</version>
-        <configuration>
-          <show>protected</show>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <source.version>1.6</source.version>
+    <deploy.local.dir>/export/maven-repository</deploy.local.dir>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -90,6 +65,37 @@
       <optional>true</optional>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.2</version>
+        <configuration>
+          <source>${source.version}</source>
+          <target>${source.version}</target>
+          <fork>true</fork>
+          <showDeprecation>true</showDeprecation>
+          <showWarnings>true</showWarnings>
+          <compilerArgs>
+            <arg>-Xlint</arg>
+            <arg>-Xlint:-serial</arg>
+            <arg>-Xlint:-path</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+        <configuration>
+          <show>protected</show>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <!-- the genrecord profile updates the Depot persistent record classes, run thusly:
        mvn -Pgenrecord process-classes -->
