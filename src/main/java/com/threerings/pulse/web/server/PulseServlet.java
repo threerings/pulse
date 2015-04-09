@@ -3,12 +3,18 @@
 
 package com.threerings.pulse.web.server;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,14 +28,12 @@ import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
+import com.samskivert.mustache.Mustache;
+import com.samskivert.mustache.Template;
 
 import com.samskivert.servlet.util.ParameterUtil;
 import com.samskivert.util.Calendars;
 import com.samskivert.util.StringUtil;
-import com.samskivert.velocity.FormTool;
-import com.samskivert.velocity.VelocityUtil;
 
 import com.threerings.pulse.server.persist.PulseRecord;
 import com.threerings.pulse.server.persist.PulseRepository;
@@ -98,9 +102,11 @@ public class PulseServlet extends HttpServlet
         }
 
         try {
-            _velocity = VelocityUtil.createEngine();
+            InputStream in = getClass().getClassLoader().getResourceAsStream(GRAPHS_TMPL);
+            if (in == null) throw new FileNotFoundException(GRAPHS_TMPL);
+            _template = _compiler.compile(new InputStreamReader(in, "UTF-8"));
         } catch (Exception e) {
-            throw new ServletException("Failed to initialize Velocity", e);
+            throw new ServletException(e);
         }
     }
 
@@ -108,9 +114,8 @@ public class PulseServlet extends HttpServlet
     protected void doGet (HttpServletRequest req, HttpServletResponse rsp)
         throws IOException
     {
-        VelocityContext ctx = createContext(req);
+        Map<String,Object> ctx = createContext(req);
         ctx.put("graphs", Lists.newArrayList());
-
         sendResponse(ctx, rsp);
     }
 
@@ -118,7 +123,7 @@ public class PulseServlet extends HttpServlet
     protected void doPost (HttpServletRequest req, HttpServletResponse rsp)
         throws IOException
     {
-        VelocityContext ctx = createContext(req);
+        Map<String,Object> ctx = createContext(req);
         Timestamp start = Calendars.now().addDays(-1).toTimestamp(); // TODO
 
         List<GraphData> graphs = Lists.newArrayList();
@@ -144,24 +149,25 @@ public class PulseServlet extends HttpServlet
         sendResponse(ctx, rsp);
     }
 
-    protected VelocityContext createContext (HttpServletRequest req)
+    protected Map<String,Object> createContext (final HttpServletRequest req)
     {
-        VelocityContext ctx = new VelocityContext();
+        Map<String,Object> ctx = new HashMap<String,Object>();
         ctx.put("records", _records);
-        ctx.put("form", new FormTool(req));
+        ctx.put("checked", new Mustache.Lambda() {
+            public void execute (Template.Fragment frag, Writer out) throws IOException {
+                String key = frag.execute();
+                if (req.getParameter(key) != null) out.write("checked");
+            }
+        });
         return ctx;
     }
 
-    protected void sendResponse (VelocityContext ctx, HttpServletResponse rsp)
+    protected void sendResponse (Map<String,Object> ctx, HttpServletResponse rsp)
         throws IOException
     {
         PrintWriter out = new PrintWriter(rsp.getOutputStream());
-        try {
-            _velocity.mergeTemplate(GRAPHS_TMPL, "UTF-8", ctx, out);
-            out.close();
-        } catch (Exception e) {
-            throw (IOException)new IOException("Velocity failure").initCause(e); // yay 1.5!
-        }
+        _template.execute(ctx, out);
+        out.close();
     }
 
     protected static long normalize (Number[] data)
@@ -193,8 +199,9 @@ public class PulseServlet extends HttpServlet
         return buf.toString();
     }
 
-    protected List<RecordInfo> _records = Lists.newArrayList();
-    protected VelocityEngine _velocity;
+    protected final List<RecordInfo> _records = Lists.newArrayList();
+    protected final Mustache.Compiler _compiler = Mustache.compiler();
+    protected Template _template;
 
     @Inject protected PulseRepository _pulseRepo;
 

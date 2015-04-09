@@ -5,27 +5,25 @@
 <table>
 <tr><td valign="top" style="padding-right: 10px">
 <form action="/pulse" method="POST">
-#foreach ($record in $records)
-<b>$record.name</b><br/>
-#foreach ($field in $record.fields)
-<div style="white-space: nowrap; clear: both">$form.checkbox($field.id, false) $field.name</div>
-#end
-#end
+{{#records}}
+<b>{{name}}</b><br/>
+{{#fields}}
+<div style="white-space: nowrap; clear: both">
+<input type="checkbox" name="{{id}}" {{#checked}}{{id}}{{/checked}}> {{name}}
+</div>
+{{/fields}}
+{{/records}}
 <input type="submit" name="submit" value="update">
 </form>
 
 </td><td width="100%" valign="top">
 
-#set ($curid = "")
-#foreach ($graph in $graphs)
-#if ($curid != $graph.field.id)
-#if ($curid != "")
+{{#graphs}}
+{{^-first}}
 <div style="width: 100%; height: 1px; background: #000000; margin: 5px 0px"></div>
-#end
-#set ($curid = $graph.field.id)
-#end
-<img src="http://chart.apis.google.com/chart?${graph.chartParams}"/>
-#end
+{{/-first}}
+<img src="http://chart.apis.google.com/chart?{{chartParams}}"/>
+{{/graphs}}
 
 </td></tr></table>
 
