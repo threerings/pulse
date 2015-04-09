@@ -97,9 +97,9 @@
     </plugins>
   </build>
 
-  <!-- the genrecord profile updates the Depot persistent record classes, run thusly:
-       mvn -Pgenrecord process-classes -->
   <profiles>
+    <!-- the genrecord profile updates the Depot persistent record classes, run thusly:
+         mvn -Pgenrecord process-classes -->
     <profile>
       <id>genrecord</id>
       <build>
