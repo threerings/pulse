@@ -21,6 +21,7 @@
 
   <scm>
     <connection>scm:git:https://github.com/threerings/pulse.git</connection>
+    <developerConnection>scm:git:https://github.com/threerings/pulse.git</developerConnection>
     <url>http://github.com/threerings/pulse/</url>
   </scm>
 
