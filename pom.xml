@@ -20,7 +20,7 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:https://github.com/threerings/pulse.git</connection>
+    <connection>scm:git:https://github.com/threerings/pulse.git</connection>
     <url>http://github.com/threerings/pulse/</url>
   </scm>
 
