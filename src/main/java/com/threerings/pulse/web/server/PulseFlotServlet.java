@@ -5,8 +5,10 @@ package com.threerings.pulse.web.server;
 
 import static com.threerings.servlet.util.Converters.TO_LONG;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -17,8 +19,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
 import org.json.JSONException;
 import org.json.JSONWriter;
 
@@ -27,10 +27,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import com.samskivert.io.StreamUtil;
+import com.samskivert.mustache.Mustache;
+import com.samskivert.mustache.Template;
 import com.samskivert.net.PathUtil;
 import com.samskivert.util.Calendars;
-
-import com.samskivert.velocity.VelocityUtil;
 
 import com.threerings.pulse.server.persist.GenericPulseRecord;
 import com.threerings.pulse.server.persist.PulseRecord;
@@ -52,9 +52,11 @@ public class PulseFlotServlet extends HttpServlet
         }
 
         try {
-            _velocity = VelocityUtil.createEngine();
+            InputStream in = getClass().getClassLoader().getResourceAsStream(GRAPHS_TMPL);
+            if (in == null) throw new FileNotFoundException(GRAPHS_TMPL);
+            _template = _compiler.compile(new InputStreamReader(in, "UTF-8"));
         } catch (Exception e) {
-            throw new ServletException("Failed to initialize Velocity", e);
+            throw new ServletException(e);
         }
     }
 
@@ -99,7 +101,7 @@ public class PulseFlotServlet extends HttpServlet
         throws IOException
     {
         resp.setContentType("text/html");
-        StringWriter writer = new StringWriter();
+        final StringWriter writer = new StringWriter();
         JSONWriter jsonWriter = new JSONWriter(writer);
 
         try {
@@ -126,14 +128,10 @@ public class PulseFlotServlet extends HttpServlet
         } catch (JSONException je) {
             throw new IllegalStateException("Could not convert events to json.", je);
         }
-        VelocityContext ctx = new VelocityContext();
-        ctx.put("records", writer.toString());
 
-        try {
-            _velocity.mergeTemplate(GRAPHS_TMPL, "UTF-8", ctx, resp.getWriter());
-        } catch (Exception e) {
-            throw (IOException)new IOException("Velocity failure").initCause(e); // yay 1.5!
-        }
+        _template.execute(new Object() {
+            public String records = writer.toString();
+        }, resp.getWriter());
     }
 
     /**
@@ -179,8 +177,9 @@ public class PulseFlotServlet extends HttpServlet
         }
     }
 
-    protected VelocityEngine _velocity;
-    protected Map<String, RecordInfo> _records = Maps.newHashMap();
+    protected final Map<String, RecordInfo> _records = Maps.newHashMap();
+    protected final Mustache.Compiler _compiler = Mustache.compiler();
+    protected Template _template;
 
     @Inject protected PulseRepository _pulseRepo;
 
