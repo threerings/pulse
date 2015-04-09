@@ -133,5 +133,17 @@
         </plugins>
       </build>
     </profile>
+
+    <!-- For deploying to the usual ooo place -->
+    <profile>
+      <id>deploy-local</id>
+      <distributionManagement>
+        <repository>
+          <id>ooo-local</id>
+          <name>OOO Maven repository</name>
+          <url>file:///${deploy.local.dir}</url>
+        </repository>
+      </distributionManagement>
+    </profile>
   </profiles>
 </project>
