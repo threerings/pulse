@@ -51,7 +51,7 @@
     <dependency>
       <groupId>com.threerings</groupId>
       <artifactId>ooo-util</artifactId>
-      <version>1.3</version>
+      <version>1.4.1</version>
     </dependency>
     <dependency>
       <groupId>com.google.inject.extensions</groupId>
@@ -61,7 +61,7 @@
     <dependency>
       <groupId>com.samskivert</groupId>
       <artifactId>depot</artifactId>
-      <version>1.6</version>
+      <version>1.7</version>
     </dependency>
     <dependency>
       <groupId>org.apache.velocity</groupId>
@@ -90,4 +90,48 @@
       <optional>true</optional>
     </dependency>
   </dependencies>
+
+  <!-- the genrecord profile updates the Depot persistent record classes, run thusly:
+       mvn -Pgenrecord process-classes -->
+  <profiles>
+    <profile>
+      <id>genrecord</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.6</version><!--$NO-MVN-MAN-VER$ This quiets an m2e warning-->
+            <executions>
+              <execution>
+                <phase>process-classes</phase>
+                <configuration>
+                  <target>
+                    <taskdef name="grecord" classname="com.samskivert.depot.tools.GenRecordTask"
+                             classpathref="maven.plugin.classpath"/>
+                    <path id="built.classpath">
+                      <path refid="maven.compile.classpath"/>
+                      <pathelement location="${project.build.outputDirectory}"/>
+                    </path>
+                    <grecord classpathref="built.classpath">
+                      <fileset dir="${project.build.sourceDirectory}" includes="**/*Record.java"/>
+                    </grecord>
+                  </target>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+            <dependencies>
+              <dependency>
+                <groupId>com.samskivert</groupId>
+                <artifactId>depot</artifactId>
+                <version>1.7</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
