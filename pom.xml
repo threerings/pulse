@@ -10,7 +10,7 @@
   <groupId>com.threerings</groupId>
   <artifactId>pulse</artifactId>
   <packaging>jar</packaging>
-  <version>1.5</version>
+  <version>1.6-SNAPSHOT</version>
 
   <name>pulse</name>
   <description>A library for collecting and dispalying stats.</description>
